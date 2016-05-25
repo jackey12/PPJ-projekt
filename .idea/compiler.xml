@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="PPJ-projekt" />
         <module name="Semestral_JH" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="PPJ-projekt" target="1.8" />
       <module name="Semestral_JH" target="1.8" />
     </bytecodeTargetLevel>
   </component>
