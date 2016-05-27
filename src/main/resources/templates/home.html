@@ -2,11 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home controller</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p>
-    home
-</p>
+<div id="wrapper">
+
+    <div id="imageLayer">
+        <div id="picture">
+            <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+            <img width="500px" height="600px" th:src="${actualPicture.pictureURL}"/>
+            <!--/*@thymesVar id="previousPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+            <!--/*@thymesVar id="nextPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+            <a th:if="${previousPicture !=null}" th:href="'?id='+${previousPicture.getId()}">PREVIOUS</a>
+            <a th:if="${nextPicture !=null}" th:href="'?id='+${nextPicture.getId()}">NEXT</a>
+        </div>
+
+        <div id="pictureInfo">
+            <table>
+                <tr>
+                    <th>Název</th><th>Autor</th><th>Datum vytvoření</th><th>Datum změny</th>
+                </tr>
+                <tr>
+                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                    <td th:text="${actualPicture.getName()}"></td><td th:text="${actualPicture.getAutor()}"></td><td th:text="${actualPicture.getCreatedAt()}"></td><td th:text="${actualPicture.getLastUpdate()}"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>Likes</th><th>Dislikes</th>
+                </tr>
+                <tr>
+                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                    <td th:text="${actualPicture.getLikesCount()}"></td><td th:text="${actualPicture.getDislikesCount()}"></td>
+                </tr>
+            </table>
+            <p>
+                Tags: <br />
+                <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                <span th:each="tag : ${actualPicture.getTags()}">
+                    <span th:text="${tag.toString()}"/>
+                </span>
+            </p>
+        </div>
+    </div>
+    <div id="commentsLayer">
+        <h3>Comments</h3>
+        <!--/*@thymesVar id="comments" type="List"*/-->
+        <!--/*@thymesVar id="comment" type="com.semestral.hirnsal.db.tables.CommentTable"*/-->
+        <div th:each="comment,iterationStatus  : ${comments}">
+            <div class="comment">
+                <p th:text=" ${comment.getCommentText()}" ></p>
+                <p th:text="'Autor ' + ${comment.getAutor().getName()} + '| vytvořeno : ' + ${comment.getCreatedAt()}" ></p>
+                <a th:href="'likeIncrementforComment?id=' + ${comment.getId()}" th:text="'Likes: '+ ${comment.getLikesCount()}" />
+                <a th:href="'likeDecrementforComment?id=' + ${comment.getId()}" th:text="'Dislikes: '+ ${comment.getDislikesCount()}" />
+            </div>
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
