@@ -4,23 +4,30 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jakub on 27.05.2016.
  */
 
 @Entity
-@Table(name = "Autor")
-@Document(collection = "Autor")
+@Table(name = "autor")
+@Document(collection = "autor")
 public class AutorTable {
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(nullable = false, name = "Name")
+    @Column(nullable = false, name = "name")
     private String name;
     @Column(nullable = false, name = "RegistrationDate")
     private Date date;
+
+    @OneToMany(mappedBy = "autor")
+    private List<CommentTable> comments;
+
+    @OneToMany(mappedBy = "autor")
+    private List<PictureTable> pictures;
 
     public AutorTable(String name, Date date) {
         this.name = name;

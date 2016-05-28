@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface BasePictureRepository  extends CrudRepository<PictureTable, Integer>{
     List<PictureTable> findAll();
-    List<PictureTable> findByIDAutor(int id);
+    List<PictureTable> findByAutorId(int id);
     List<PictureTable> findByName(String name);
-    List<PictureTable> findByTag(String tag);
+    //List<PictureTable> findByTag(String tag);
 
     PictureTable findFirstByIdLessThanOrderByIdDesc(int id);
 

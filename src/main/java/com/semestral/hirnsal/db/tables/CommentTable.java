@@ -11,16 +11,17 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "Comments")
-@Document(collection = "Comments")
+@Table(name = "comments")
+@Document(collection = "comments")
 public class CommentTable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(nullable = false)
     private String commentText;
     @ManyToOne
-    @JoinColumn(name = "Autor")
+    @JoinColumn(name = "autor")
     @DBRef
     private AutorTable autor;
     @Column(nullable = false)
@@ -29,8 +30,7 @@ public class CommentTable {
     private int likesCount = 0;
     private int dislikesCount = 0;
     @ManyToOne(optional = false)
-    @Column(name = "Picture")
-    private PictureTable commentedPicture;
+    private PictureTable picture;
 
     public CommentTable(AutorTable autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureTable commentedPicture){
 
@@ -40,7 +40,7 @@ public class CommentTable {
         this.lastUpdate = lastUpdate;
         this.likesCount = likesCount;
         this.dislikesCount = dislikesCount;
-        this.commentedPicture = commentedPicture;
+        this.picture = commentedPicture;
     }
 
     public CommentTable(){}
@@ -100,10 +100,10 @@ public class CommentTable {
     }
 
     public PictureTable getCommentedPicture() {
-        return commentedPicture;
+        return picture;
     }
 
     public void setCommentedPicture(PictureTable commentedPicture) {
-        this.commentedPicture = commentedPicture;
+        this.picture = commentedPicture;
     }
 }

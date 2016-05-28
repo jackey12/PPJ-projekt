@@ -24,17 +24,17 @@ public class DefaultController {
     @Autowired
     BaseCommentRepository baseCommentRepositoryy;
 
-    @RequestMapping("/")
+    @RequestMapping(value = {"/", "/home"})
     public String home(@RequestParam(required = false, defaultValue = "1", value = "id") int id, Model model) {
         PictureTable actualPicture;
-        if(id == -1) {
+        if(false && id == -1) {
             int count = basePictureRepository.findAll().size();
             Random rand = new Random();
             int randomNum = 1 + rand.nextInt((count - 1) + 1);
             id = randomNum;
             actualPicture = basePictureRepository.findAll().get(randomNum);
         }else{
-            actualPicture = basePictureRepository.findAll().get(id);
+            actualPicture = basePictureRepository.findOne(id);
         }
 
         PictureTable previousPicture = basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);

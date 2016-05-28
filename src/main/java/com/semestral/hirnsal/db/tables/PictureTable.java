@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,8 +14,8 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "Picture")
-@Document(collection = "Picture")
+@Table(name = "picture")
+@Document(collection = "picture")
 public class PictureTable {
 
     @Id
@@ -25,7 +26,7 @@ public class PictureTable {
     @Column(nullable = false)
     private String name;
     @ManyToOne
-    @JoinColumn(name = "Autor")
+    @JoinColumn(name = "autor")
     @DBRef
     private AutorTable autor;
     @Column(nullable = false)
@@ -33,11 +34,13 @@ public class PictureTable {
     private Date lastUpdate;
     private long likesCount = 0;
     private long dislikesCount = 0;
-    @ElementCollection
-    @Column(name = "tags", length = 16)
-    private Set<String> tags = new HashSet<>();
+    @OneToMany(mappedBy = "picture")
+    private List<PictureTagTable> tags;
+   /*@ElementCollection
+   @Column(name = "tags", length = 16)
+   private Set<String> tags = new HashSet<>();*/
 
-    public PictureTable(String pictureURL, String name, AutorTable autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, Set<String> tags) {
+    public PictureTable(String pictureURL, String name, AutorTable autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagTable> tags) {
         this.pictureURL = pictureURL;
         this.name = name;
         this.autor = autor;
@@ -52,6 +55,10 @@ public class PictureTable {
         this.name = name;
         this.pictureURL = pictureURL;
         this.createdAt = createdAt;
+    }
+    public PictureTable(String name, String pictureURL){
+        this.name = name;
+        this.pictureURL = pictureURL;
     }
 
     public PictureTable() {}
@@ -112,13 +119,14 @@ public class PictureTable {
         this.dislikesCount = dislikesCount;
     }
 
-    public Set<String> getTags() {
+    public List<PictureTagTable> getTags() {
         return tags;
     }
 
-    public void setTags(Set<String> tags) {
+    public void setTags(List<PictureTagTable> tags) {
         this.tags = tags;
     }
+
 
     public int getId() {
         return id;
