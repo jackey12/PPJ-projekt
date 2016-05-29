@@ -31,13 +31,13 @@ public class PictureService {
         basePictureRepository.save(picture);
     }
 
-    public boolean hasPicture(String name) {
+    public boolean hasPicture(UUID id) {
 
-        if (name== null) {
+        if (id == null) {
             return false;
         }
 
-        return basePictureRepository.findByName(name).size() != 0;
+        return basePictureRepository.findOne(id) != null;
     }
 
     public PictureTable getPicture(String name) {
@@ -53,6 +53,15 @@ public class PictureService {
         }
 
         return pictures.get(0);
+    }
+    public PictureTable getPicture(UUID id){
+        return basePictureRepository.findOne(id);
+    }
+    public PictureTable getPreviousPicture(UUID id){
+        return basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
+    }
+    public PictureTable getNextPicture(UUID id){
+       return basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
     }
 
     public void saveOrUpdate(PictureTable picture) {
