@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by jakub on 27.05.2016.
@@ -16,8 +17,10 @@ import java.util.Date;
 public class CommentTable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(nullable = false)
     private String commentText;
     @ManyToOne
@@ -32,8 +35,8 @@ public class CommentTable {
     @ManyToOne(optional = false)
     private PictureTable picture;
 
-    public CommentTable(AutorTable autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureTable commentedPicture){
-
+    public CommentTable(UUID id, AutorTable autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureTable commentedPicture){
+        this.id = id;
         this.autor = autor;
         this.commentText = commentText;
         this.createdAt = createdAt;
@@ -45,7 +48,8 @@ public class CommentTable {
 
     public CommentTable(){}
 
-    public CommentTable(String commentText, Date createdAt){
+    public CommentTable(UUID id, String commentText, Date createdAt){
+        this.id = id;
         this.commentText = commentText;
         this.createdAt = createdAt;
         this.lastUpdate = createdAt;
@@ -105,5 +109,9 @@ public class CommentTable {
 
     public void setCommentedPicture(PictureTable commentedPicture) {
         this.picture = commentedPicture;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * Created by jakub on 28.05.2016.
@@ -15,8 +16,10 @@ import javax.persistence.*;
 public class PictureTagTable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(nullable = false)
     private String tagText;
     @ManyToOne
@@ -24,7 +27,8 @@ public class PictureTagTable {
     @DBRef
     private PictureTable picture;
 
-    public PictureTagTable(String tagText, PictureTable picture) {
+    public PictureTagTable(UUID id, String tagText, PictureTable picture) {
+        this.id = id;
         this.tagText = tagText;
         this.picture = picture;
     }

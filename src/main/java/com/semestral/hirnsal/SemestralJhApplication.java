@@ -15,10 +15,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,15 +40,43 @@ public class SemestralJhApplication {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
 			String name = "Jackey";
-			baseAutorRepository.save(new AutorTable(name, date));
+			AutorTable ja = new AutorTable(UUID.randomUUID(), name, date);
+			baseAutorRepository.save(ja);
+			logger.info("created Autor " + name + ", created at " + dateFormat.format(date));
+
+			name = "Jakub";
+			baseAutorRepository.save(new AutorTable(UUID.randomUUID(), name, date));
 			logger.info("created Autor " + name + ", created at " + dateFormat.format(date));
 
 
-			PictureTable pictureTable = new PictureTable("introducing Jericho", "http://vignette4.wikia.nocookie.net/ironman/images/9/9d/Tumblr_l1iotoYo541qbn8c7.jpg/revision/latest?cb=20131120195052");
+			PictureTable pictureTable = new PictureTable(UUID.randomUUID(), "introducing Jericho", "http://vignette4.wikia.nocookie.net/ironman/images/9/9d/Tumblr_l1iotoYo541qbn8c7.jpg/revision/latest?cb=20131120195052", date);
+			pictureTable.setAutor(ja);
 			List<PictureTagTable> tags = new ArrayList<>();
-			tags.add(new PictureTagTable("iron man", pictureTable));
-			tags.add(new PictureTagTable("jericho", pictureTable));
-			tags.add(new PictureTagTable("missile test", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "jericho", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "missile test", pictureTable));
+			pictureTable.setTags(tags);
+			basePictureRepository.save(pictureTable);
+			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
+
+
+			pictureTable = new PictureTable(UUID.randomUUID(), "Iron man returns", "http://www.kultura.cz/data/files/iron-man-novinka.jpeg", date);
+			pictureTable.setAutor(ja);
+			tags = new ArrayList<>();
+			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "returns", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "in action", pictureTable));
+			pictureTable.setTags(tags);
+			basePictureRepository.save(pictureTable);
+			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
+
+
+			pictureTable = new PictureTable(UUID.randomUUID(), "IM house", "http://vignette2.wikia.nocookie.net/marvelmovies/images/7/7c/TonyStarkMantion-IM3.png/revision/latest?cb=20131127033251", date);
+			pictureTable.setAutor(ja);
+			tags = new ArrayList<>();
+			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "House", pictureTable));
+			tags.add(new PictureTagTable(UUID.randomUUID(), "cliff", pictureTable));
 			pictureTable.setTags(tags);
 			basePictureRepository.save(pictureTable);
 			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());

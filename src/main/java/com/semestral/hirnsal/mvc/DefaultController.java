@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by jakub on 25.05.2016.
@@ -25,14 +26,14 @@ public class DefaultController {
     BaseCommentRepository baseCommentRepositoryy;
 
     @RequestMapping(value = {"/", "/home"})
-    public String home(@RequestParam(required = false, defaultValue = "1", value = "id") int id, Model model) {
+    public String home(@RequestParam(required = false, defaultValue = "", value = "id") UUID id, Model model) {
         PictureTable actualPicture;
-        if(false && id == -1) {
+        if(id == null) {
             int count = basePictureRepository.findAll().size();
             Random rand = new Random();
             int randomNum = 1 + rand.nextInt((count - 1) + 1);
-            id = randomNum;
             actualPicture = basePictureRepository.findAll().get(randomNum);
+            id = actualPicture.getId();
         }else{
             actualPicture = basePictureRepository.findOne(id);
         }
@@ -40,7 +41,7 @@ public class DefaultController {
         PictureTable previousPicture = basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
         PictureTable nextPicture = basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
 
-        List<CommentTable> comments = baseCommentRepositoryy.findByPicture(actualPicture);
+        List<CommentTable> comments = baseCommentRepositoryy.findByPictureId(actualPicture);
         model.addAttribute("previousPicture", previousPicture);
         model.addAttribute("actualPicture", actualPicture);
         model.addAttribute("nextPicture", nextPicture);

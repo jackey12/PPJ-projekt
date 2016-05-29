@@ -2,22 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home controller</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/default_style.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 </head>
 <body>
+<!--/*@thymesVar id="previousPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+<!--/*@thymesVar id="nextPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+<!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
 <div id="wrapper">
 
     <div id="imageLayer">
         <div id="picture">
-            <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-            <img width="500px" height="600px" th:src="${actualPicture.pictureURL}"/>
-            <!--/*@thymesVar id="previousPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-            <!--/*@thymesVar id="nextPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-            <a th:if="${previousPicture !=null}" th:href="'?id='+${previousPicture.getId()}">PREVIOUS</a>
-            <a th:if="${nextPicture !=null}" th:href="'?id='+${nextPicture.getId()}">NEXT</a>
-        </div>
 
+            <img th:src="${actualPicture.pictureURL}"/>
+
+
+        </div>
+        <a th:if="${previousPicture !=null}" th:href="'?id='+${previousPicture.getId()}">PREVIOUS</a>
+        <a th:if="${nextPicture !=null}" th:href="'?id='+${nextPicture.getId()}">NEXT</a>
         <div id="pictureInfo">
             <table>
                 <tr>
@@ -25,9 +28,11 @@
                 </tr>
                 <tr>
                     <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-                    <td th:text="${actualPicture.getName()}"></td><td th:text="${actualPicture.getAutor()}"></td><td th:text="${actualPicture.getCreatedAt()}"></td><td th:text="${actualPicture.getLastUpdate()}"></td>
+                    <td th:text="${actualPicture.getName()}"></td><td th:if="${actualPicture.getAutor() !=null}" th:text="${actualPicture.getAutor().getName()}"></td><td  th:if="${actualPicture.getCreatedAt() !=null}" th:text="${actualPicture.getCreatedAt().toString()}"></td><td th:if="${actualPicture.getLastUpdate() !=null}" th:text="${actualPicture.getLastUpdate().toString()}"></td>
                 </tr>
             </table>
+            <br />
+            <br />
             <table>
                 <tr>
                     <th>Likes</th><th>Dislikes</th>
@@ -41,7 +46,7 @@
                 Tags: <br />
                 <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
                 <span th:each="tag : ${actualPicture.getTags()}">
-                    <span th:text="${tag.toString()}"/>
+                    <span th:text="${tag.getTagText()} "/> |&nbsp;
                 </span>
             </p>
         </div>

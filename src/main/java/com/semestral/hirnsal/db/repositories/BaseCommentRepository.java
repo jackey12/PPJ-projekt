@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface BaseCommentRepository extends CrudRepository<CommentTable, Integer> {
     List<CommentTable> findAll();
-    List<CommentTable> findByPicture(PictureTable pic);
+    List<CommentTable> findByPictureId(PictureTable pic);
 }

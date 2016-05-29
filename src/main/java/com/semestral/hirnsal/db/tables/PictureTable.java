@@ -4,10 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by jakub on 27.05.2016.
@@ -19,8 +16,10 @@ import java.util.Set;
 public class PictureTable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(nullable = false)
     private String pictureURL;
     @Column(nullable = false)
@@ -40,7 +39,8 @@ public class PictureTable {
    @Column(name = "tags", length = 16)
    private Set<String> tags = new HashSet<>();*/
 
-    public PictureTable(String pictureURL, String name, AutorTable autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagTable> tags) {
+    public PictureTable(UUID id, String pictureURL, String name, AutorTable autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagTable> tags) {
+        this.id = id;
         this.pictureURL = pictureURL;
         this.name = name;
         this.autor = autor;
@@ -51,12 +51,14 @@ public class PictureTable {
         this.tags = tags;
     }
 
-    public PictureTable(String name, String pictureURL, Date createdAt) {
+    public PictureTable(UUID id, String name, String pictureURL, Date createdAt) {
+        this.id = id;
         this.name = name;
         this.pictureURL = pictureURL;
         this.createdAt = createdAt;
     }
-    public PictureTable(String name, String pictureURL){
+    public PictureTable(UUID id, String name, String pictureURL){
+        this.id = id;
         this.name = name;
         this.pictureURL = pictureURL;
     }
@@ -127,8 +129,7 @@ public class PictureTable {
         this.tags = tags;
     }
 
-
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 }
