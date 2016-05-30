@@ -1,5 +1,6 @@
 package com.semestral.hirnsal.service;
 
+import com.semestral.hirnsal.db.repositories.BasePictureTagRepository;
 import com.semestral.hirnsal.db.tables.PictureTable;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ public class PictureService {
 
     private final BasePictureRepository basePictureRepository;
 
+
     @Autowired
     public PictureService(BasePictureRepository basePictureRepository){
         this.basePictureRepository = basePictureRepository;
     }
+
 
     public List<PictureTable> getCurrent() {
         return StreamSupport.stream(basePictureRepository.findAll().spliterator(), false).collect(Collectors.toList());
@@ -62,6 +65,18 @@ public class PictureService {
     }
     public PictureTable getNextPicture(UUID id){
        return basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
+    }
+
+    public long incrementLikes(PictureTable pic){
+        pic.setLikesCount(pic.getLikesCount()+1);
+        saveOrUpdate(pic);
+        return pic.getLikesCount();
+    }
+
+    public long incrementDisLikes(PictureTable pic){
+        pic.setDislikesCount(pic.getDislikesCount()+1);
+        saveOrUpdate(pic);
+        return pic.getLikesCount();
     }
 
     public void saveOrUpdate(PictureTable picture) {

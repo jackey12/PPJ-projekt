@@ -1,4 +1,5 @@
 package com.semestral.hirnsal.mvc;
+import com.semestral.hirnsal.client.ServerApi;
 import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import com.semestral.hirnsal.db.tables.CommentTable;
@@ -60,6 +61,7 @@ public class DefaultController {
         model.addAttribute("actualPicture", actualPicture);
         model.addAttribute("nextPicture", nextPicture);
         model.addAttribute("comments", comments);
+        model.addAttribute("serverApi", ServerApi.class);
 
         return "home";
     }

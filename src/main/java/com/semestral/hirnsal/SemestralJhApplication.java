@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,11 @@ import java.util.stream.Stream;
 public class SemestralJhApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(SemestralJhApplication.class);
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+		return new StandardServletMultipartResolver();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SemestralJhApplication.class, args);

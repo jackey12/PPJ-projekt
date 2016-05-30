@@ -1,5 +1,6 @@
 package com.semestral.hirnsal.rest;
 
+import com.semestral.hirnsal.client.ServerApi;
 import com.semestral.hirnsal.db.tables.CommentTable;
 import com.semestral.hirnsal.service.CommentService;
 import com.semestral.hirnsal.service.PictureService;
@@ -31,7 +32,7 @@ public class CommentController {
     }
 
     //create
-    @RequestMapping(value = "/comment", method = RequestMethod.POST)
+    @RequestMapping(value = ServerApi.COMMENT_PATH, method = RequestMethod.POST)
     public ResponseEntity<CommentTable> addCommentMethod(@RequestBody CommentTable commentTable){
         if (pictureService.hasPicture(commentTable.getCommentedPicture().getId())) {
             commentService.create(commentTable);
@@ -42,15 +43,15 @@ public class CommentController {
     }
 
     //retrieve
-    @RequestMapping(value = "/comment", method = RequestMethod.GET)
-    public ResponseEntity<List<CommentTable>> showOffers() {
+    @RequestMapping(value = ServerApi.COMMENT_PATH, method = RequestMethod.GET)
+    public ResponseEntity<List<CommentTable>> showComments() {
         List<CommentTable> comments = commentService.getCurrent();
         return new ResponseEntity<>(comments,HttpStatus.OK);
     }
 
 
     //retrieve
-    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = ServerApi.COMMENT_ID_PATH, method = RequestMethod.GET)
     public ResponseEntity<CommentTable> getComment(@PathVariable("id") UUID id){
         CommentTable commentTable = commentService.getComment(id);
         if ( commentTable == null) {
@@ -60,7 +61,7 @@ public class CommentController {
     }
 
     //delete
-    @RequestMapping(value = "/comment/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = ServerApi.COMMENT_ID_PATH, method = RequestMethod.DELETE)
     public ResponseEntity<CommentTable> deleteComment(@PathVariable("id") UUID id){
         CommentTable commentTable = commentService.getComment(id);
         if (commentTable == null)
