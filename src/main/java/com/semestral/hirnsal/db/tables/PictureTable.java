@@ -1,5 +1,8 @@
 package com.semestral.hirnsal.db.tables;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,6 +29,7 @@ public class PictureTable {
     private String name;
     @ManyToOne
     @JoinColumn(name = "autor")
+    @JsonBackReference
     @DBRef
     private AutorTable autor;
     @Column(nullable = false)
@@ -33,7 +37,8 @@ public class PictureTable {
     private Date lastUpdate;
     private long likesCount = 0;
     private long dislikesCount = 0;
-    @OneToMany(mappedBy = "picture")
+    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PictureTagTable> tags;
    /*@ElementCollection
    @Column(name = "tags", length = 16)

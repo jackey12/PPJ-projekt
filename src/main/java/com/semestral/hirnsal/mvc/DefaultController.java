@@ -42,7 +42,7 @@ public class DefaultController {
         if(id == null) {
             int count = pictureService.getCurrent().size();
             Random rand = new Random();
-            int randomNum = 1 + rand.nextInt((count - 1) + 1);
+            int randomNum =  rand.nextInt(count - 1 );
             //actualPicture = basePictureRepository.findAll().get(randomNum);
             actualPicture = pictureService.getCurrent().get(randomNum);
             id = actualPicture.getId();
@@ -64,5 +64,60 @@ public class DefaultController {
         model.addAttribute("serverApi", ServerApi.class);
 
         return "home";
+    }
+
+
+    @RequestMapping(ServerApi.HOME_COMMENT_GIVELIKE_PATH)
+    public String giveLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
+        if(id != null){
+            CommentTable comment = commentService.getComment(id);
+            if (comment != null) {
+                commentService.incrementLikes(comment);
+                id = comment.getCommentedPicture().getId();
+            }
+            return "redirect:/home?id="+id;
+        }else{
+            return "redirect:/home";
+        }
+    }
+
+    @RequestMapping(ServerApi.HOME_COMMENT_GIVEDISLIKE_PATH)
+    public String giveDisLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
+        if(id != null){
+            CommentTable comment = commentService.getComment(id);
+            if (comment != null) {
+                commentService.incrementDisLikes(comment);
+                id = comment.getCommentedPicture().getId();
+            }
+            return "redirect:/home?id="+id;
+        }else{
+            return "redirect:/home";
+        }
+    }
+
+    @RequestMapping(ServerApi.HOME_PICTURE_GIVELIKE_PATH)
+    public String giveLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
+        if(id != null){
+            PictureTable picture = pictureService.getPicture(id);
+            if (picture != null) {
+                pictureService.incrementLikes(picture);
+            }
+            return "redirect:/home?id="+id;
+        }else{
+            return "redirect:/home";
+        }
+    }
+
+    @RequestMapping(ServerApi.HOME_PICTURE_GIVEDISLIKE_PATH)
+    public String giveDisLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
+        if(id != null){
+            PictureTable picture = pictureService.getPicture(id);
+            if (picture != null) {
+                pictureService.incrementDisLikes(picture);
+            }
+            return "redirect:/home?id="+id;
+        }else{
+            return "redirect:/home";
+        }
     }
 }

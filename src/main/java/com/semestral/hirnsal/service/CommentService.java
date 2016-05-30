@@ -45,4 +45,20 @@ public class CommentService {
         baseCommentRepository.delete(id);
     }
 
+
+    public long incrementLikes(CommentTable comment){
+        comment.setLikesCount(comment.getLikesCount()+1);
+        saveOrUpdate(comment);
+        return comment.getLikesCount();
+    }
+
+    public long incrementDisLikes(CommentTable comment){
+        comment.setDislikesCount(comment.getDislikesCount()+1);
+        saveOrUpdate(comment);
+        return comment.getLikesCount();
+    }
+
+    public void saveOrUpdate(CommentTable comment) {
+        baseCommentRepository.save(comment);
+    }
 }

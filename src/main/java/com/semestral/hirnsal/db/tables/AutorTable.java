@@ -1,5 +1,7 @@
 package com.semestral.hirnsal.db.tables;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
@@ -25,10 +27,14 @@ public class AutorTable {
     @Column(nullable = false, name = "RegistrationDate")
     private Date date;
 
-    @OneToMany(mappedBy = "autor")
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @JsonBackReference
     private List<CommentTable> comments;
 
-    @OneToMany(mappedBy = "autor")
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @JsonBackReference
     private List<PictureTable> pictures;
 
     public AutorTable(UUID id, String name, Date date) {

@@ -22,6 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.tools.JavaFileManager;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,20 +75,19 @@ public class PictureController {
         ImageStatus state = new ImageStatus(ImageStatus.ImageState.READY);
 
         try {
-
-            String pictureURL = this.filePrefix + imageData.getOriginalFilename();
-            String realPathtoUploads =  context.getRealPath(this.dataImgPath);
-            if(! new File(realPathtoUploads).exists())
+            if(! new File( this.dataImgPath).exists())
             {
-                new File(realPathtoUploads).mkdir();
+                new File( this.dataImgPath).mkdir();
             }
-            String fullPathName = realPathtoUploads + imageData.getOriginalFilename();
+            String fullPathName = this.dataImgPath + "/"+imageData.getOriginalFilename();
             Date date = new Date();
-            PictureTable pictureTable = new PictureTable(UUID.randomUUID(), name, pictureURL,date);
+            PictureTable pictureTable = new PictureTable(UUID.randomUUID(), name, this.filePrefix + fullPathName ,date);
 
 
-            File destination = new File(fullPathName);
-            imageData.transferTo(destination);
+            Path target = Paths.get(this.dataImgPath).resolve(imageData.getOriginalFilename());
+            Files.copy(imageData.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+            state =new ImageStatus(ImageStatus.ImageState.PROCESSING);
 
             if(iDautor != null){
                 AutorTable autorTable = autorService.getAutor(iDautor);
@@ -103,6 +106,8 @@ public class PictureController {
             }
 
 
+
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -112,7 +117,7 @@ public class PictureController {
     }
 
 
-    @RequestMapping(value="/picture/givelike/{id}", method = RequestMethod.GET)
+    @RequestMapping(value={ServerApi.PICTURE_GIVELIKEID_PATH}, method = RequestMethod.GET)
     public long giveLikeToPicture(@PathVariable UUID id) {
         PictureTable pictureTable = pictureService.getPicture(id);
         logger.debug("Picture id -="+id);
@@ -144,7 +149,7 @@ public class PictureController {
         return pictureService.getCurrent();
     }
 
-    @RequestMapping(value = ServerApi.PICTURE_ID_PATH, method = RequestMethod.GET)
+    @RequestMapping(value = ServerApi.PICTURE_GETONEID_PATH, method = RequestMethod.GET)
     public PictureTable getPictureById(@PathVariable UUID id) {
         return pictureService.getPicture(id);
     }

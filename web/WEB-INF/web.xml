@@ -16,7 +16,7 @@
 
     <error-page>
         <error-code>500</error-code>
-        <location>/500.jsp</location>
+        <location>/500</location>
     </error-page>
 
 

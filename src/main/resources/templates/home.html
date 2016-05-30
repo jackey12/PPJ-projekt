@@ -40,7 +40,7 @@
                 <tr>
                     <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
                     <td><a th:href="@{'/picture/givelike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getLikesCount()}"></a></td>
-                    <td><a th:href="@{'/picture/givedislike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getLikesCount()}"></a></td>
+                    <td><a th:href="@{'/picture/givedislike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getDislikesCount()}"></a></td>
                 </tr>
             </table>
             <p>

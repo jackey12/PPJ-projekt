@@ -4,6 +4,7 @@ import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
 import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import com.semestral.hirnsal.db.tables.AutorTable;
+import com.semestral.hirnsal.db.tables.CommentTable;
 import com.semestral.hirnsal.db.tables.PictureTable;
 import com.semestral.hirnsal.db.tables.PictureTagTable;
 import org.springframework.boot.CommandLineRunner;
@@ -88,6 +89,12 @@ public class SemestralJhApplication {
 			basePictureRepository.save(pictureTable);
 			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
 
+			CommentTable commentTable = new CommentTable(UUID.randomUUID(), "Celkem solidni obrazek", ja, pictureTable);
+			baseCommentRepository.save(commentTable);
+			logger.info("Created comment: " + commentTable.getCommentText());
+			commentTable = new CommentTable(UUID.randomUUID(), "Otřesný", ja, pictureTable);
+			baseCommentRepository.save(commentTable);
+			logger.info("Created comment: " + commentTable.getCommentText());
 		};
 	}
 

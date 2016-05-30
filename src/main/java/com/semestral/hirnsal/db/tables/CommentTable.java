@@ -1,5 +1,6 @@
 package com.semestral.hirnsal.db.tables;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,6 +25,7 @@ public class CommentTable {
     @Column(nullable = false)
     private String commentText;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "autor")
     @DBRef
     private AutorTable autor;
@@ -33,6 +35,7 @@ public class CommentTable {
     private int likesCount = 0;
     private int dislikesCount = 0;
     @ManyToOne(optional = false)
+    @JsonBackReference
     private PictureTable picture;
 
     public CommentTable(UUID id, AutorTable autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureTable commentedPicture){
@@ -53,6 +56,12 @@ public class CommentTable {
         this.commentText = commentText;
         this.createdAt = createdAt;
         this.lastUpdate = createdAt;
+    }
+    public CommentTable(UUID id, String text, AutorTable autorTable, PictureTable commentedPicture){
+        this.id = id;
+        this.commentText = text;
+        this.autor = autorTable;
+        this.picture = commentedPicture;
     }
 
     public AutorTable getAutor(){

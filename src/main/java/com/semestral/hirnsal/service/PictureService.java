@@ -27,7 +27,7 @@ public class PictureService {
 
 
     public List<PictureTable> getCurrent() {
-        return StreamSupport.stream(basePictureRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        return basePictureRepository.findAll();
     }
 
     public void create (PictureTable picture){

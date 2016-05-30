@@ -17,16 +17,24 @@ public interface ServerApi {
     public static final String UPLOAD_PATH = "/upload/{name}";
 
     public static final String COMMENT_PATH = "/comment";
+    public static final String COMMENT_GETALL_PATH = "/comment";
     public static final String COMMENT_ID_PATH = "/comment/{id}";
+    public static final String COMMENT_GETONEID_PATH = "/comment/getone/{id}";
     public static final String COMMENT_GIVELIKEID_PATH = "/comment/givelike/{id}";
     public static final String COMMENT_GIVEDISLIKEID_PATH = "/comment/givedislike/{id}";
 
+    public static final String PICTURE_PATH = "/picture";
     public static final String PICTURE_GIVELIKEID_PATH = "/picture/givelike/{id}";
     public static final String PICTURE_GIVEDISLIKEID_PATH = "/picture/givedislike/{id}";
-    public static final String PICTURE_PATH = "/picture";
-    public static final String PICTURE_ID_PATH = PICTURE_PATH +"/{id}";
+    public static final String PICTURE_ID_PATH = "/picture/{id}";
+    public static final String PICTURE_GETONEID_PATH = "/picture/getone/{id}";
 
     public static final String AUTOR_PATH = "/autor";
+
+    public static final String HOME_PICTURE_GIVELIKE_PATH = "/picture/givelike";
+    public static final String HOME_PICTURE_GIVEDISLIKE_PATH = "/picture/givedislike";
+    public static final String HOME_COMMENT_GIVELIKE_PATH = "/comment/givelike";
+    public static final String HOME_COMMENT_GIVEDISLIKE_PATH = "/comment/givedislike";
 
 
     @Multipart
