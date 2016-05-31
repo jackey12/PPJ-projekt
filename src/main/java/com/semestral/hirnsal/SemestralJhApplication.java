@@ -10,6 +10,7 @@ import com.semestral.hirnsal.db.tables.AutorEntity;
 import com.semestral.hirnsal.db.tables.CommentEntity;
 import com.semestral.hirnsal.db.tables.PictureEntity;
 import com.semestral.hirnsal.db.tables.PictureTagEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -81,6 +83,16 @@ public class SemestralJhApplication {
 			basePictureTagRepository.save(tags);
 			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
 
+			CommentEntity commentEntity = new CommentEntity(UUID.randomUUID(), "pěkné", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
+			commentEntity = new CommentEntity(UUID.randomUUID(), "nelíbí se mi", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
+			commentEntity = new CommentEntity(UUID.randomUUID(), "chtělo by to kvalitnější", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
+
 
 			pictureEntity = new PictureEntity(UUID.randomUUID(), "Iron man returns", "https://youngcinemabuffs.files.wordpress.com/2016/01/iron-man-walking-away-from-explosions-wallpaper-53437abd4822d-marvel-needs-a-strong-return-to-gaming-here-s-how-jpeg-3003921.jpg", date);
 			pictureEntity.setAutor(ja);
@@ -92,6 +104,13 @@ public class SemestralJhApplication {
 			basePictureRepository.save(pictureEntity);
 			basePictureTagRepository.save(tags);
 			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
+
+			commentEntity = new CommentEntity(UUID.randomUUID(), "Cool pic", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
+			commentEntity = new CommentEntity(UUID.randomUUID(), "nice", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
 
 
 			pictureEntity = new PictureEntity(UUID.randomUUID(), "IM house", "https://i.ytimg.com/vi/dP5vYIvni0A/maxresdefault.jpg", date);
@@ -106,7 +125,7 @@ public class SemestralJhApplication {
 
 			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
 
-			CommentEntity commentEntity = new CommentEntity(UUID.randomUUID(), "Celkem solidni obrazek", ja, pictureEntity, date);
+			commentEntity = new CommentEntity(UUID.randomUUID(), "Celkem solidni obrazek", ja, pictureEntity, date);
 			baseCommentRepository.save(commentEntity);
 			logger.debug("Created comment: " + commentEntity.getCommentText());
 			commentEntity = new CommentEntity(UUID.randomUUID(), "Otřesný", ja, pictureEntity, date);

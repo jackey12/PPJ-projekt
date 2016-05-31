@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,7 +48,7 @@ public class PictureController {
     ServletContext context;
     private static final Logger logger = LoggerFactory.getLogger(SemestralJhApplication.class);
 
-    private final String filePrefix = "file:///";
+    private final String filePrefix = "file://";
     @Autowired
     public void setPictureService(PictureService pictureService) {
         this.pictureService = pictureService;
@@ -114,43 +116,84 @@ public class PictureController {
 
 
     @RequestMapping(value={ServerApi.PICTURE_GIVELIKEID_PATH}, method = RequestMethod.GET)
-    public long giveLikeToPicture(@PathVariable UUID id) {
+    public ResponseEntity<Long> giveLikeToPicture(@PathVariable UUID id) {
         PictureEntity pictureEntity = pictureService.getPicture(id);
         logger.debug("Picture id -="+id);
         if (pictureEntity != null) {
             logger.debug("Picture id ="+id);
             long count = pictureService.incrementLikes(pictureEntity);
             logger.debug("Like Incremented to ="+count);
-            return count;
+            return new ResponseEntity<>(count, HttpStatus.OK);
         } else {
             logger.warn("Picture ("+id+") was not found. Mapping="+ServerApi.PICTURE_GIVELIKEID_PATH);
-            return -1;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, value=ServerApi.PICTURE_GIVEDISLIKEID_PATH)
-    public long giveDislikeToPicture(@PathVariable UUID id) {
+    public ResponseEntity<Long> giveDislikeToPicture(@PathVariable UUID id) {
         PictureEntity pictureEntity = pictureService.getPicture(id);
         if (pictureEntity != null) {
             logger.debug("Picture id ="+id);
             long count = pictureService.incrementDisLikes(pictureEntity);
             logger.debug("Dislike Incremented to ="+count);
-            return count;
+            return new ResponseEntity<>(count, HttpStatus.OK);
 
         } else {
             logger.warn("Picture ("+id+") was not found. Mapping="+ServerApi.PICTURE_GIVEDISLIKEID_PATH);
-            return -1;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYAUTOR_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByAuthor(@PathVariable UUID id) {
+        return new ResponseEntity<>(pictureService.getPictureByAutor(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYNAME_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByName(@PathVariable String name) {
+        return new ResponseEntity<>(pictureService.getPictureByName(name), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYTAG_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByTag(@PathVariable String tag) {
+        return new ResponseEntity<>(pictureService.getPictureByTag(tag), HttpStatus.OK);
     }
 
 
     @RequestMapping(value = ServerApi.PICTURE_PATH, method = RequestMethod.GET)
-    public List<PictureEntity> getPictures() {
-        return pictureService.getCurrent();
+    public ResponseEntity<List<PictureEntity>> getPictures() {
+        return new ResponseEntity<>(pictureService.getCurrent(), HttpStatus.OK);
     }
 
     @RequestMapping(value = ServerApi.PICTURE_GETONEID_PATH, method = RequestMethod.GET)
-    public PictureEntity getPictureById(@PathVariable UUID id) {
-        return pictureService.getPicture(id);
+    public ResponseEntity<PictureEntity> getPictureById(@PathVariable UUID id) {
+        return new ResponseEntity<>(pictureService.getPicture(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = ServerApi.PICTURE_ID_PATH)
+    public ResponseEntity<PictureEntity> deletePicture(@PathVariable UUID id) {
+        PictureEntity picture = pictureService.getPicture(id);
+        if(picture != null){
+            pictureService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //create
+    @RequestMapping(value = ServerApi.PICTURE_PATH, method = RequestMethod.POST)
+    public ResponseEntity<PictureEntity> createPicture(@RequestBody PictureEntity pictureEntity){
+        if (pictureEntity != null) {
+            Date date = new Date();
+            pictureEntity.setCreatedAt(date);
+            pictureEntity.setLastUpdate(date);
+            pictureService.create(pictureEntity);
+            return new ResponseEntity<>(pictureEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -41,7 +41,7 @@ public class PictureService {
         return basePictureRepository.findOne(id) != null;
     }
 
-    public PictureEntity getPicture(String name) {
+    public List<PictureEntity> getPictureByName(String name) {
 
         if (name == null) {
             return null;
@@ -53,10 +53,18 @@ public class PictureService {
             return null;
         }
 
-        return pictures.get(0);
+        return pictures;
     }
     public PictureEntity getPicture(UUID id){
         return basePictureRepository.findOne(id);
+    }
+
+    public List<PictureEntity> getPictureByTag(String tag){
+        return basePictureRepository.findByTagsTagText(tag);
+    }
+
+    public List<PictureEntity> getPictureByAutor(UUID id){
+        return basePictureRepository.findByAutorId(id);
     }
     public PictureEntity getPreviousPicture(UUID id){
         return basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);

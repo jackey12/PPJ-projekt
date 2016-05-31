@@ -5,6 +5,7 @@ import com.semestral.hirnsal.db.tables.AutorEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,5 +31,13 @@ public class AutorService {
     public AutorEntity getAutor(UUID id){
         return baseAutorRepository.findOne(id);
     }
+    public List<AutorEntity> getAllAutors(){
+        return baseAutorRepository.findAll();
+    }
+
+    public List<AutorEntity> getAutorsByName(String name){
+        return baseAutorRepository.findByName(name);
+    }
+
 
 }

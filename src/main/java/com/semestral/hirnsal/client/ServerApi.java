@@ -19,7 +19,6 @@ public interface ServerApi {
     public static final String COMMENT_PATH = "/comment";
     public static final String COMMENT_GETALL_PATH = "/comment";
     public static final String COMMENT_ID_PATH = "/comment/{id}";
-    public static final String COMMENT_GETONEID_PATH = "/comment/getone/{id}";
     public static final String COMMENT_GIVELIKEID_PATH = "/comment/givelike/{id}";
     public static final String COMMENT_GIVEDISLIKEID_PATH = "/comment/givedislike/{id}";
 
@@ -28,8 +27,13 @@ public interface ServerApi {
     public static final String PICTURE_GIVEDISLIKEID_PATH = "/picture/givedislike/{id}";
     public static final String PICTURE_ID_PATH = "/picture/{id}";
     public static final String PICTURE_GETONEID_PATH = "/picture/getone/{id}";
+    public static final String PICTURE_GETBYAUTOR_PATH = "/picture/getbyautor/{id}";
+    public static final String PICTURE_GETBYNAME_PATH = "/picture/getbyname/{name}";
+    public static final String PICTURE_GETBYTAG_PATH = "/picture/getbytag/{tag}";
 
     public static final String AUTOR_PATH = "/autor";
+    public static final String AUTOR_ID_PATH = "/autor/{id}";
+    public static final String AUTOR_GETBYNAME_PATH = "/autor/getbyname/{name}";
 
     public static final String HOME_PICTURE_GIVELIKE_PATH = "/picture/givelike";
     public static final String HOME_PICTURE_GIVEDISLIKE_PATH = "/picture/givedislike";

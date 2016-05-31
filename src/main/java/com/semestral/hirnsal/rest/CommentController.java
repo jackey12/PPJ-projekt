@@ -42,7 +42,7 @@ public class CommentController {
             commentService.create(commentEntity);
             return new ResponseEntity<>(commentEntity, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,16 +53,6 @@ public class CommentController {
         return new ResponseEntity<>(comments,HttpStatus.OK);
     }
 
-
-    //retrieve
-    @RequestMapping(value = ServerApi.COMMENT_GETONEID_PATH, method = RequestMethod.GET)
-    public ResponseEntity<CommentEntity> getComment(@PathVariable("id") UUID id){
-        CommentEntity commentEntity = commentService.getComment(id);
-        if ( commentEntity == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else
-            return new ResponseEntity<>(commentEntity,HttpStatus.OK);
-    }
 
     //delete
     @RequestMapping(value = ServerApi.COMMENT_ID_PATH, method = RequestMethod.DELETE)
@@ -76,28 +66,39 @@ public class CommentController {
     }
 
     @RequestMapping(value={ServerApi.COMMENT_GIVELIKEID_PATH}, method = RequestMethod.GET)
-    public long giveLikeToComment(@PathVariable UUID id) {
+    public ResponseEntity<Long> giveLikeToComment(@PathVariable UUID id) {
         CommentEntity commentEntity = commentService.getComment(id);
         logger.debug("Picture id ="+id);
         if (commentEntity != null) {
             logger.debug("Comment id ="+id);
             long count = commentService.incrementLikes(commentEntity);
             logger.debug("Incremented to ="+count);
-            return count;
+            return new ResponseEntity<>(count, HttpStatus.OK);
         } else {
             logger.warn("Picture ("+id+") was not found. Mapping="+ServerApi.COMMENT_GIVELIKEID_PATH);
-            return -1;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, value=ServerApi.COMMENT_GIVEDISLIKEID_PATH)
-    public long giveDislikeToPicture(@PathVariable UUID id) {
+    public ResponseEntity<Long> giveDislikeToPicture(@PathVariable UUID id) {
         CommentEntity commentEntity = commentService.getComment(id);
         if (commentEntity != null) {
-            return commentService.incrementDisLikes(commentEntity);
+            long count = commentService.incrementDisLikes(commentEntity);
+            return new ResponseEntity<>(count, HttpStatus.OK);
         } else {
             logger.warn("Picture ("+id+") was not found. Mapping="+ServerApi.COMMENT_GIVEDISLIKEID_PATH);
-            return -1;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    //retrieve
+    @RequestMapping(value = ServerApi.COMMENT_ID_PATH, method = RequestMethod.GET)
+    public ResponseEntity<CommentEntity> getCommentByID(@PathVariable("id") UUID id){
+        CommentEntity commentEntity = commentService.getComment(id);
+        if (commentEntity == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else
+        return new ResponseEntity<>(commentEntity, HttpStatus.OK);
     }
 }
