@@ -4,7 +4,9 @@ import com.semestral.hirnsal.db.tables.PictureEntity;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import java.util.UUID;
  * Created by jakub on 27.05.2016.
  */
 @Service
+@Transactional
 public class PictureService {
 
     private final BasePictureRepository basePictureRepository;
@@ -43,15 +46,12 @@ public class PictureService {
 
     public List<PictureEntity> getPictureByName(String name) {
 
+        List<PictureEntity> pictures = new ArrayList<>();
+
         if (name == null) {
-            return null;
+            return pictures;
         }
-
-        List<PictureEntity> pictures = basePictureRepository.findByName(name);
-
-        if (pictures.size() == 0) {
-            return null;
-        }
+        pictures = basePictureRepository.findByName(name);
 
         return pictures;
     }

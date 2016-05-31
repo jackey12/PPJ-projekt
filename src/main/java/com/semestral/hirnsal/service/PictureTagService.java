@@ -4,6 +4,7 @@ import com.semestral.hirnsal.db.repositories.BasePictureTagRepository;
 import com.semestral.hirnsal.db.tables.PictureTagEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  */
 
 @Service
+@Transactional
 public class PictureTagService {
 
     private final BasePictureTagRepository basePictureTagRepository;

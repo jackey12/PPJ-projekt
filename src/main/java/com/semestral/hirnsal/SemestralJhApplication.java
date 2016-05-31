@@ -56,7 +56,7 @@ public class SemestralJhApplication {
 		logger.trace("Application started at "+new Date());
 	}
 
-
+/*
 	@Bean
 	public CommandLineRunner demo(BaseAutorRepository baseAutorRepository, BaseCommentRepository baseCommentRepository, BasePictureRepository basePictureRepository, BasePictureTagRepository basePictureTagRepository) {
 		return (args) -> {
@@ -133,4 +133,5 @@ public class SemestralJhApplication {
 			logger.debug("Created comment: " + commentEntity.getCommentText());
 		};
 	}
+	*/
 }

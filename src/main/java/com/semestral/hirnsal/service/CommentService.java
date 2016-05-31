@@ -4,6 +4,7 @@ import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
 import com.semestral.hirnsal.db.tables.CommentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.StreamSupport;
  */
 
 @Service
+@Transactional
 public class CommentService {
 
     private final BaseCommentRepository baseCommentRepository;

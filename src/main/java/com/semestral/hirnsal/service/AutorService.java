@@ -4,6 +4,7 @@ import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
 import com.semestral.hirnsal.db.tables.AutorEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
  * Created by jakub on 29.05.2016.
  */
 @Service
+@Transactional
 public class AutorService {
 
     private final BaseAutorRepository baseAutorRepository;
