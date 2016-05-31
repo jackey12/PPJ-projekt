@@ -48,7 +48,7 @@ public class PictureController {
     ServletContext context;
     private static final Logger logger = LoggerFactory.getLogger(SemestralJhApplication.class);
 
-    private final String filePrefix = "file://";
+    private final String filePrefix = "file:///";
     @Autowired
     public void setPictureService(PictureService pictureService) {
         this.pictureService = pictureService;

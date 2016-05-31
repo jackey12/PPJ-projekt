@@ -16,7 +16,7 @@ public interface BasePictureRepository  extends CrudRepository<PictureTable, UUI
     List<PictureTable> findAll();
     List<PictureTable> findByAutorId(UUID id);
     List<PictureTable> findByName(String name);
-    //List<PictureTable> findByTag(String tag);
+    List<PictureTable> findByTags(String tag);
 
     PictureTable findFirstByIdLessThanOrderByIdDesc(UUID id);
 

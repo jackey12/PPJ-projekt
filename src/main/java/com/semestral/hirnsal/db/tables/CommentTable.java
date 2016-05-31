@@ -19,7 +19,6 @@ public class CommentTable {
 
     @Id
     @org.springframework.data.annotation.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     @Column(nullable = false)
@@ -57,11 +56,12 @@ public class CommentTable {
         this.createdAt = createdAt;
         this.lastUpdate = createdAt;
     }
-    public CommentTable(UUID id, String text, AutorTable autorTable, PictureTable commentedPicture){
+    public CommentTable(UUID id, String text, AutorTable autorTable, PictureTable commentedPicture, Date createdAt){
         this.id = id;
         this.commentText = text;
         this.autor = autorTable;
         this.picture = commentedPicture;
+        this.createdAt = createdAt;
     }
 
     public AutorTable getAutor(){

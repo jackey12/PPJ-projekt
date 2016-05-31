@@ -19,20 +19,19 @@ import java.util.UUID;
 public class AutorTable {
     @Id
     @org.springframework.data.annotation.Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
-    @Column(nullable = false, name = "name")
+    @Column(nullable = false)
     private String name;
     @Column(nullable = false, name = "RegistrationDate")
     private Date date;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonBackReference
     private List<CommentTable> comments;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonBackReference
     private List<PictureTable> pictures;

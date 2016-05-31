@@ -18,7 +18,6 @@ public class PictureTagTable {
 
     @Id
     @org.springframework.data.annotation.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     @Column(nullable = false)

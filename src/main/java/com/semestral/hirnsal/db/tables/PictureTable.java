@@ -20,7 +20,6 @@ public class PictureTable {
 
     @Id
     @org.springframework.data.annotation.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     @Column(nullable = false)
@@ -38,6 +37,7 @@ public class PictureTable {
     private long likesCount = 0;
     private long dislikesCount = 0;
     @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonManagedReference
     private List<PictureTagTable> tags;
    /*@ElementCollection

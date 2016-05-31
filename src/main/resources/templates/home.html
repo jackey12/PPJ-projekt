@@ -19,8 +19,15 @@
 
 
         </div>
-        <a th:if="${previousPicture !=null}" th:href="'?id='+${previousPicture.getId()}">PREVIOUS</a>
-        <a th:if="${nextPicture !=null}" th:href="'?id='+${nextPicture.getId()}">NEXT</a>
+        <div id="navigation">
+        <table>
+            <tr>
+                <td> <a th:if="${previousPicture !=null}" th:href="'?id='+${previousPicture.getId()}">PREVIOUS</a></td>
+                <td> <a th:if="${nextPicture !=null}" th:href="'?id='+${nextPicture.getId()}">NEXT</a></td>
+            </tr>
+        </table>
+        </div>
+
         <div id="pictureInfo">
             <table>
                 <tr>
@@ -50,6 +57,8 @@
                     <span th:text="${tag.getTagText()} "/> |&nbsp;
                 </span>
             </p>
+            <br />
+            <br />
         </div>
     </div>
     <div id="commentsLayer">
