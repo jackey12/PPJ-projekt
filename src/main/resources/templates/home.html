@@ -7,9 +7,9 @@
 
 </head>
 <body>
-<!--/*@thymesVar id="previousPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-<!--/*@thymesVar id="nextPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
-<!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+<!--/*@thymesVar id="previousPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
+<!--/*@thymesVar id="nextPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
+<!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
 <div id="wrapper">
 
     <div id="imageLayer">
@@ -34,7 +34,7 @@
                     <th>Název</th><th>Autor</th><th>Datum vytvoření</th><th>Datum změny</th>
                 </tr>
                 <tr>
-                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
                     <td th:text="${actualPicture.getName()}"></td><td th:if="${actualPicture.getAutor() !=null}" th:text="${actualPicture.getAutor().getName()}"></td><td  th:if="${actualPicture.getCreatedAt() !=null}" th:text="${actualPicture.getCreatedAt().toString()}"></td><td th:if="${actualPicture.getLastUpdate() !=null}" th:text="${actualPicture.getLastUpdate().toString()}"></td>
                 </tr>
             </table>
@@ -45,14 +45,14 @@
                     <th>Likes</th><th>Dislikes</th>
                 </tr>
                 <tr>
-                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                    <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
                     <td><a th:href="@{'/picture/givelike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getLikesCount()}"></a></td>
                     <td><a th:href="@{'/picture/givedislike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getDislikesCount()}"></a></td>
                 </tr>
             </table>
             <p>
                 Tags: <br />
-                <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureTable"*/-->
+                <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
                 <span th:each="tag : ${actualPicture.getTags()}">
                     <span th:text="${tag.getTagText()} "/> |&nbsp;
                 </span>
@@ -64,7 +64,7 @@
     <div id="commentsLayer">
         <h3>Comments</h3>
         <!--/*@thymesVar id="comments" type="List"*/-->
-        <!--/*@thymesVar id="comment" type="com.semestral.hirnsal.db.tables.CommentTable"*/-->
+        <!--/*@thymesVar id="comment" type="com.semestral.hirnsal.db.tables.CommentEntity"*/-->
         <div th:each="comment,iterationStatus  : ${comments}">
             <div class="comment">
                 <p th:text=" ${comment.getCommentText()}" ></p>

@@ -16,7 +16,7 @@ import java.util.*;
 @Entity
 @Table(name = "picture")
 @Document(collection = "picture")
-public class PictureTable {
+public class PictureEntity {
 
     @Id
     @org.springframework.data.annotation.Id
@@ -30,21 +30,18 @@ public class PictureTable {
     @JoinColumn(name = "autor")
     @JsonBackReference
     @DBRef
-    private AutorTable autor;
+    private AutorEntity autor;
     @Column(nullable = false)
     private Date createdAt;
     private Date lastUpdate;
     private long likesCount = 0;
     private long dislikesCount = 0;
-    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonManagedReference
-    private List<PictureTagTable> tags;
-   /*@ElementCollection
-   @Column(name = "tags", length = 16)
-   private Set<String> tags = new HashSet<>();*/
+    private List<PictureTagEntity> tags;
 
-    public PictureTable(UUID id, String pictureURL, String name, AutorTable autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagTable> tags) {
+    public PictureEntity(UUID id, String pictureURL, String name, AutorEntity autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagEntity> tags) {
         this.id = id;
         this.pictureURL = pictureURL;
         this.name = name;
@@ -56,19 +53,20 @@ public class PictureTable {
         this.tags = tags;
     }
 
-    public PictureTable(UUID id, String name, String pictureURL, Date createdAt) {
+    public PictureEntity(UUID id, String name, String pictureURL, Date createdAt) {
         this.id = id;
         this.name = name;
         this.pictureURL = pictureURL;
         this.createdAt = createdAt;
+        this.lastUpdate = createdAt;
     }
-    public PictureTable(UUID id, String name, String pictureURL){
+    public PictureEntity(UUID id, String name, String pictureURL){
         this.id = id;
         this.name = name;
         this.pictureURL = pictureURL;
     }
 
-    public PictureTable() {}
+    public PictureEntity() {}
 
     public String getPictureURL() {
         return pictureURL;
@@ -86,11 +84,11 @@ public class PictureTable {
         this.name = name;
     }
 
-    public AutorTable getAutor() {
+    public AutorEntity getAutor() {
         return autor;
     }
 
-    public void setAutor(AutorTable autor) {
+    public void setAutor(AutorEntity autor) {
         this.autor = autor;
     }
 
@@ -126,15 +124,23 @@ public class PictureTable {
         this.dislikesCount = dislikesCount;
     }
 
-    public List<PictureTagTable> getTags() {
+    public List<PictureTagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(List<PictureTagTable> tags) {
+    public void setTags(List<PictureTagEntity> tags) {
         this.tags = tags;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public List<String> getAllTagsText(){
+        List<String> tags = new ArrayList<>();
+        for(PictureTagEntity tag :this.tags){
+            tags.add(tag.getTagText());
+        }
+        return tags;
     }
 }

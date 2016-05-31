@@ -1,9 +1,7 @@
 package com.semestral.hirnsal.mvc;
 import com.semestral.hirnsal.client.ServerApi;
-import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
-import com.semestral.hirnsal.db.repositories.BasePictureRepository;
-import com.semestral.hirnsal.db.tables.CommentTable;
-import com.semestral.hirnsal.db.tables.PictureTable;
+import com.semestral.hirnsal.db.tables.CommentEntity;
+import com.semestral.hirnsal.db.tables.PictureEntity;
 import com.semestral.hirnsal.service.CommentService;
 import com.semestral.hirnsal.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,7 @@ public class DefaultController {
 
     @RequestMapping(value = {"/", "/home"})
     public String home(@RequestParam(required = false, defaultValue = "", value = "id") UUID id, Model model) {
-        PictureTable actualPicture;
+        PictureEntity actualPicture;
         if(id == null) {
             int count = pictureService.getCurrent().size();
             Random rand = new Random();
@@ -51,12 +49,12 @@ public class DefaultController {
             actualPicture = pictureService.getPicture(id);
         }
 
-        //PictureTable previousPicture = basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
-        PictureTable previousPicture = pictureService.getPreviousPicture(id);
-        //PictureTable nextPicture = basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
-        PictureTable nextPicture = pictureService.getNextPicture(id);
+        //PictureEntity previousPicture = basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
+        PictureEntity previousPicture = pictureService.getPreviousPicture(id);
+        //PictureEntity nextPicture = basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
+        PictureEntity nextPicture = pictureService.getNextPicture(id);
 
-        List<CommentTable> comments = commentService.getRelatedComments(actualPicture.getId());
+        List<CommentEntity> comments = commentService.getRelatedComments(actualPicture.getId());
         model.addAttribute("previousPicture", previousPicture);
         model.addAttribute("actualPicture", actualPicture);
         model.addAttribute("nextPicture", nextPicture);
@@ -70,7 +68,7 @@ public class DefaultController {
     @RequestMapping(ServerApi.HOME_COMMENT_GIVELIKE_PATH)
     public String giveLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
-            CommentTable comment = commentService.getComment(id);
+            CommentEntity comment = commentService.getComment(id);
             if (comment != null) {
                 commentService.incrementLikes(comment);
                 id = comment.getCommentedPicture().getId();
@@ -84,7 +82,7 @@ public class DefaultController {
     @RequestMapping(ServerApi.HOME_COMMENT_GIVEDISLIKE_PATH)
     public String giveDisLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
-            CommentTable comment = commentService.getComment(id);
+            CommentEntity comment = commentService.getComment(id);
             if (comment != null) {
                 commentService.incrementDisLikes(comment);
                 id = comment.getCommentedPicture().getId();
@@ -98,7 +96,7 @@ public class DefaultController {
     @RequestMapping(ServerApi.HOME_PICTURE_GIVELIKE_PATH)
     public String giveLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
-            PictureTable picture = pictureService.getPicture(id);
+            PictureEntity picture = pictureService.getPicture(id);
             if (picture != null) {
                 pictureService.incrementLikes(picture);
             }
@@ -111,7 +109,7 @@ public class DefaultController {
     @RequestMapping(ServerApi.HOME_PICTURE_GIVEDISLIKE_PATH)
     public String giveDisLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
-            PictureTable picture = pictureService.getPicture(id);
+            PictureEntity picture = pictureService.getPicture(id);
             if (picture != null) {
                 pictureService.incrementDisLikes(picture);
             }

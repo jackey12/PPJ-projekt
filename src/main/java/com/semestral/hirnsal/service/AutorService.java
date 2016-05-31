@@ -1,7 +1,7 @@
 package com.semestral.hirnsal.service;
 
 import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
-import com.semestral.hirnsal.db.tables.AutorTable;
+import com.semestral.hirnsal.db.tables.AutorEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +20,14 @@ public class AutorService {
         this.baseAutorRepository = baseAutorRepository;
     }
 
-    public void create(AutorTable autorTable){
-        baseAutorRepository.save(autorTable);
+    public void create(AutorEntity autorEntity){
+        baseAutorRepository.save(autorEntity);
     }
 
     public void delete(UUID id){
         baseAutorRepository.delete(id);
     }
-    public AutorTable getAutor(UUID id){
+    public AutorEntity getAutor(UUID id){
         return baseAutorRepository.findOne(id);
     }
 

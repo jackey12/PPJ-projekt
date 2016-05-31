@@ -1,7 +1,7 @@
 package com.semestral.hirnsal.rest;
 
 import com.semestral.hirnsal.client.ServerApi;
-import com.semestral.hirnsal.db.tables.AutorTable;
+import com.semestral.hirnsal.db.tables.AutorEntity;
 import com.semestral.hirnsal.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +26,9 @@ public class AutorController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = ServerApi.AUTOR_PATH)
-    public void createAuthor(@RequestBody AutorTable autorTable) {
-        autorTable.SetDate(new Date());
-        autorService.create(autorTable);
+    public void createAuthor(@RequestBody AutorEntity autorEntity) {
+        autorEntity.SetDate(new Date());
+        autorService.create(autorEntity);
     }
 
 }

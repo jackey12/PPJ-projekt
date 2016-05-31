@@ -5,7 +5,7 @@ package com.semestral.hirnsal.client;
  */
 public class ImageStatus {
     public enum ImageState {
-        READY, PROCESSING
+        READY, PROCESSING, FAILED, UPLOADED,
     }
 
     private ImageState state;

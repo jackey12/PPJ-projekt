@@ -1,10 +1,11 @@
 package com.semestral.hirnsal.service;
 
 import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
-import com.semestral.hirnsal.db.tables.CommentTable;
+import com.semestral.hirnsal.db.tables.CommentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,19 +26,19 @@ public class CommentService {
     }
 
 
-    public List<CommentTable> getCurrent() {
+    public List<CommentEntity> getCurrent() {
         return StreamSupport.stream(baseCommentRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
-    public List<CommentTable> getRelatedComments(UUID idpic){
+    public List<CommentEntity> getRelatedComments(UUID idpic){
         return baseCommentRepository.findByPictureId(idpic);
     }
 
-    public void create(CommentTable commentTable){
-        baseCommentRepository.save(commentTable);
+    public void create(CommentEntity commentEntity){
+        baseCommentRepository.save(commentEntity);
     }
 
-    public CommentTable getComment(UUID id){
+    public CommentEntity getComment(UUID id){
         return baseCommentRepository.findOne(id);
     }
 
@@ -46,19 +47,21 @@ public class CommentService {
     }
 
 
-    public long incrementLikes(CommentTable comment){
+    public long incrementLikes(CommentEntity comment){
         comment.setLikesCount(comment.getLikesCount()+1);
+        comment.setLastUpdate(new Date());
         saveOrUpdate(comment);
         return comment.getLikesCount();
     }
 
-    public long incrementDisLikes(CommentTable comment){
+    public long incrementDisLikes(CommentEntity comment){
         comment.setDislikesCount(comment.getDislikesCount()+1);
+        comment.setLastUpdate(new Date());
         saveOrUpdate(comment);
         return comment.getLikesCount();
     }
 
-    public void saveOrUpdate(CommentTable comment) {
+    public void saveOrUpdate(CommentEntity comment) {
         baseCommentRepository.save(comment);
     }
 }

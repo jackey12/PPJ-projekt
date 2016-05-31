@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "comments")
 @Document(collection = "comments")
-public class CommentTable {
+public class CommentEntity {
 
     @Id
     @org.springframework.data.annotation.Id
@@ -27,7 +27,7 @@ public class CommentTable {
     @JsonBackReference
     @JoinColumn(name = "autor")
     @DBRef
-    private AutorTable autor;
+    private AutorEntity autor;
     @Column(nullable = false)
     private Date createdAt;
     private Date lastUpdate;
@@ -35,9 +35,9 @@ public class CommentTable {
     private int dislikesCount = 0;
     @ManyToOne(optional = false)
     @JsonBackReference
-    private PictureTable picture;
+    private PictureEntity picture;
 
-    public CommentTable(UUID id, AutorTable autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureTable commentedPicture){
+    public CommentEntity(UUID id, AutorEntity autor, String commentText, Date createdAt, Date lastUpdate, int likesCount, int dislikesCount, PictureEntity commentedPicture){
         this.id = id;
         this.autor = autor;
         this.commentText = commentText;
@@ -48,27 +48,27 @@ public class CommentTable {
         this.picture = commentedPicture;
     }
 
-    public CommentTable(){}
+    public CommentEntity(){}
 
-    public CommentTable(UUID id, String commentText, Date createdAt){
+    public CommentEntity(UUID id, String commentText, Date createdAt){
         this.id = id;
         this.commentText = commentText;
         this.createdAt = createdAt;
         this.lastUpdate = createdAt;
     }
-    public CommentTable(UUID id, String text, AutorTable autorTable, PictureTable commentedPicture, Date createdAt){
+    public CommentEntity(UUID id, String text, AutorEntity autorEntity, PictureEntity commentedPicture, Date createdAt){
         this.id = id;
         this.commentText = text;
-        this.autor = autorTable;
+        this.autor = autorEntity;
         this.picture = commentedPicture;
         this.createdAt = createdAt;
     }
 
-    public AutorTable getAutor(){
+    public AutorEntity getAutor(){
         return this.autor;
     }
 
-    public void setAutor(AutorTable autor) {
+    public void setAutor(AutorEntity autor) {
         this.autor = autor;
     }
 
@@ -112,11 +112,11 @@ public class CommentTable {
         this.dislikesCount = dislikesCount;
     }
 
-    public PictureTable getCommentedPicture() {
+    public PictureEntity getCommentedPicture() {
         return picture;
     }
 
-    public void setCommentedPicture(PictureTable commentedPicture) {
+    public void setCommentedPicture(PictureEntity commentedPicture) {
         this.picture = commentedPicture;
     }
 

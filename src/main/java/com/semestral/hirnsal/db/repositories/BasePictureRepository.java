@@ -1,6 +1,6 @@
 package com.semestral.hirnsal.db.repositories;
 
-import com.semestral.hirnsal.db.tables.PictureTable;
+import com.semestral.hirnsal.db.tables.PictureEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,14 +12,14 @@ import java.util.UUID;
  */
 
 @Repository
-public interface BasePictureRepository  extends CrudRepository<PictureTable, UUID>{
-    List<PictureTable> findAll();
-    List<PictureTable> findByAutorId(UUID id);
-    List<PictureTable> findByName(String name);
-    List<PictureTable> findByTags(String tag);
+public interface BasePictureRepository  extends CrudRepository<PictureEntity, UUID>{
+    List<PictureEntity> findAll();
+    List<PictureEntity> findByAutorId(UUID id);
+    List<PictureEntity> findByName(String name);
+    List<PictureEntity> findByTagsTagText(String tag);
 
-    PictureTable findFirstByIdLessThanOrderByIdDesc(UUID id);
+    PictureEntity findFirstByIdLessThanOrderByIdDesc(UUID id);
 
-    PictureTable findFirstByIdGreaterThanOrderByIdAsc(UUID id);
+    PictureEntity findFirstByIdGreaterThanOrderByIdAsc(UUID id);
 
 }

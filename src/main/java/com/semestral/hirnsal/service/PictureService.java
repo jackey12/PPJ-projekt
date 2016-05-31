@@ -1,15 +1,13 @@
 package com.semestral.hirnsal.service;
 
-import com.semestral.hirnsal.db.repositories.BasePictureTagRepository;
-import com.semestral.hirnsal.db.tables.PictureTable;
+import com.semestral.hirnsal.db.tables.PictureEntity;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Created by jakub on 27.05.2016.
@@ -26,11 +24,11 @@ public class PictureService {
     }
 
 
-    public List<PictureTable> getCurrent() {
+    public List<PictureEntity> getCurrent() {
         return basePictureRepository.findAll();
     }
 
-    public void create (PictureTable picture){
+    public void create (PictureEntity picture){
         basePictureRepository.save(picture);
     }
 
@@ -43,13 +41,13 @@ public class PictureService {
         return basePictureRepository.findOne(id) != null;
     }
 
-    public PictureTable getPicture(String name) {
+    public PictureEntity getPicture(String name) {
 
         if (name == null) {
             return null;
         }
 
-        List<PictureTable> pictures = basePictureRepository.findByName(name);
+        List<PictureEntity> pictures = basePictureRepository.findByName(name);
 
         if (pictures.size() == 0) {
             return null;
@@ -57,29 +55,33 @@ public class PictureService {
 
         return pictures.get(0);
     }
-    public PictureTable getPicture(UUID id){
+    public PictureEntity getPicture(UUID id){
         return basePictureRepository.findOne(id);
     }
-    public PictureTable getPreviousPicture(UUID id){
+    public PictureEntity getPreviousPicture(UUID id){
         return basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
     }
-    public PictureTable getNextPicture(UUID id){
+    public PictureEntity getNextPicture(UUID id){
        return basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
     }
 
-    public long incrementLikes(PictureTable pic){
+    public long incrementLikes(PictureEntity pic){
+        Date date = new Date();
         pic.setLikesCount(pic.getLikesCount()+1);
+        pic.setLastUpdate(date);
         saveOrUpdate(pic);
         return pic.getLikesCount();
     }
 
-    public long incrementDisLikes(PictureTable pic){
+    public long incrementDisLikes(PictureEntity pic){
+        Date date = new Date();
         pic.setDislikesCount(pic.getDislikesCount()+1);
+        pic.setLastUpdate(date);
         saveOrUpdate(pic);
         return pic.getLikesCount();
     }
 
-    public void saveOrUpdate(PictureTable picture) {
+    public void saveOrUpdate(PictureEntity picture) {
         basePictureRepository.save(picture);
     }
 

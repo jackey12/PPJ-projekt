@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "autor")
 @Document(collection = "autor")
-public class AutorTable {
+public class AutorEntity {
     @Id
     @org.springframework.data.annotation.Id
     @Column(columnDefinition = "BINARY(16)")
@@ -29,21 +29,21 @@ public class AutorTable {
     @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonBackReference
-    private List<CommentTable> comments;
+    private List<CommentEntity> comments;
 
     @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JsonBackReference
-    private List<PictureTable> pictures;
+    private List<PictureEntity> pictures;
 
-    public AutorTable(UUID id, String name, Date date) {
+    public AutorEntity(UUID id, String name, Date date) {
         this.id = id;
         this.name = name;
         this.date = date;
 
     }
 
-    public AutorTable() {
+    public AutorEntity() {
     }
 
     public UUID getId(){

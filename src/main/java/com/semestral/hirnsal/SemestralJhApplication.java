@@ -6,11 +6,10 @@ import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
 import com.semestral.hirnsal.db.repositories.BaseCommentRepository;
 import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import com.semestral.hirnsal.db.repositories.BasePictureTagRepository;
-import com.semestral.hirnsal.db.tables.AutorTable;
-import com.semestral.hirnsal.db.tables.CommentTable;
-import com.semestral.hirnsal.db.tables.PictureTable;
-import com.semestral.hirnsal.db.tables.PictureTagTable;
-import org.springframework.beans.factory.annotation.Value;
+import com.semestral.hirnsal.db.tables.AutorEntity;
+import com.semestral.hirnsal.db.tables.CommentEntity;
+import com.semestral.hirnsal.db.tables.PictureEntity;
+import com.semestral.hirnsal.db.tables.PictureTagEntity;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,13 +25,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @SpringBootApplication(exclude = {
@@ -55,12 +51,7 @@ public class SemestralJhApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SemestralJhApplication.class, args);
-
-		logger.debug("Debbug, main");
-		logger.error("Errorr, main");
-		logger.info("Info, main");
-		logger.trace("Trace, main");
-		logger.warn("Warn, main");
+		logger.trace("Application started at "+new Date());
 	}
 
 
@@ -70,58 +61,57 @@ public class SemestralJhApplication {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
 			String name = "Jackey";
-			AutorTable ja = new AutorTable(UUID.randomUUID(), name, date);
+			AutorEntity ja = new AutorEntity(UUID.randomUUID(), name, date);
 			baseAutorRepository.save(ja);
-			logger.info("created Autor " + name + ", created at " + dateFormat.format(date));
+			logger.debug("created Autor " + name + ", created at " + dateFormat.format(date));
 
 			name = "Jakub";
-			baseAutorRepository.save(new AutorTable(UUID.randomUUID(), name, date));
-			logger.info("created Autor " + name + ", created at " + dateFormat.format(date));
+			baseAutorRepository.save(new AutorEntity(UUID.randomUUID(), name, date));
+			logger.debug("created Autor " + name + ", created at " + dateFormat.format(date));
 
 
-			PictureTable pictureTable = new PictureTable(UUID.randomUUID(), "introducing Jericho", "https://i.ytimg.com/vi/S0GOh3nGlik/maxresdefault.jpg", date);
-			pictureTable.setAutor(ja);
-			List<PictureTagTable> tags = new ArrayList<>();
-			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "jericho", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "missile test", pictureTable));
-			pictureTable.setTags(tags);
-			basePictureRepository.save(pictureTable);
+			PictureEntity pictureEntity = new PictureEntity(UUID.randomUUID(), "introducing Jericho", "https://i.ytimg.com/vi/S0GOh3nGlik/maxresdefault.jpg", date);
+			pictureEntity.setAutor(ja);
+			List<PictureTagEntity> tags = new ArrayList<>();
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "iron man", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "jericho", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "missile test", pictureEntity));
+			pictureEntity.setTags(tags);
+			basePictureRepository.save(pictureEntity);
 			basePictureTagRepository.save(tags);
-			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
+			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
 
 
-			pictureTable = new PictureTable(UUID.randomUUID(), "Iron man returns", "https://youngcinemabuffs.files.wordpress.com/2016/01/iron-man-walking-away-from-explosions-wallpaper-53437abd4822d-marvel-needs-a-strong-return-to-gaming-here-s-how-jpeg-3003921.jpg", date);
-			pictureTable.setAutor(ja);
+			pictureEntity = new PictureEntity(UUID.randomUUID(), "Iron man returns", "https://youngcinemabuffs.files.wordpress.com/2016/01/iron-man-walking-away-from-explosions-wallpaper-53437abd4822d-marvel-needs-a-strong-return-to-gaming-here-s-how-jpeg-3003921.jpg", date);
+			pictureEntity.setAutor(ja);
 			tags = new ArrayList<>();
-			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "returns", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "in action", pictureTable));
-			pictureTable.setTags(tags);
-			basePictureRepository.save(pictureTable);
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "iron man", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "returns", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "in action", pictureEntity));
+			pictureEntity.setTags(tags);
+			basePictureRepository.save(pictureEntity);
 			basePictureTagRepository.save(tags);
-			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
+			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
 
 
-			pictureTable = new PictureTable(UUID.randomUUID(), "IM house", "https://i.ytimg.com/vi/dP5vYIvni0A/maxresdefault.jpg", date);
-			pictureTable.setAutor(ja);
+			pictureEntity = new PictureEntity(UUID.randomUUID(), "IM house", "https://i.ytimg.com/vi/dP5vYIvni0A/maxresdefault.jpg", date);
+			pictureEntity.setAutor(ja);
 			tags = new ArrayList<>();
-			tags.add(new PictureTagTable(UUID.randomUUID(), "iron man", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "House", pictureTable));
-			tags.add(new PictureTagTable(UUID.randomUUID(), "cliff", pictureTable));
-			pictureTable.setTags(tags);
-			basePictureRepository.save(pictureTable);
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "iron man", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "House", pictureEntity));
+			tags.add(new PictureTagEntity(UUID.randomUUID(), "cliff", pictureEntity));
+			pictureEntity.setTags(tags);
+			basePictureRepository.save(pictureEntity);
 			basePictureTagRepository.save(tags);
 
-			logger.info("Created picture " + pictureTable.getName() + ", URL :  " + pictureTable.getPictureURL());
+			logger.debug("Created picture " + pictureEntity.getName() + ", URL :  " + pictureEntity.getPictureURL());
 
-			CommentTable commentTable = new CommentTable(UUID.randomUUID(), "Celkem solidni obrazek", ja, pictureTable, date);
-			baseCommentRepository.save(commentTable);
-			logger.info("Created comment: " + commentTable.getCommentText());
-			commentTable = new CommentTable(UUID.randomUUID(), "Otřesný", ja, pictureTable, date);
-			baseCommentRepository.save(commentTable);
-			logger.info("Created comment: " + commentTable.getCommentText());
+			CommentEntity commentEntity = new CommentEntity(UUID.randomUUID(), "Celkem solidni obrazek", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
+			commentEntity = new CommentEntity(UUID.randomUUID(), "Otřesný", ja, pictureEntity, date);
+			baseCommentRepository.save(commentEntity);
+			logger.debug("Created comment: " + commentEntity.getCommentText());
 		};
 	}
-
 }

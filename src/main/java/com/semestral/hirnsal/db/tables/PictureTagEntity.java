@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "picturetags")
 @Document(collection = "picturetags")
-public class PictureTagTable {
+public class PictureTagEntity {
 
     @Id
     @org.springframework.data.annotation.Id
@@ -26,15 +26,15 @@ public class PictureTagTable {
     @JoinColumn(name = "picture")
     @DBRef
     @JsonBackReference
-    private PictureTable picture;
+    private PictureEntity picture;
 
-    public PictureTagTable(UUID id, String tagText, PictureTable picture) {
+    public PictureTagEntity(UUID id, String tagText, PictureEntity picture) {
         this.id = id;
         this.tagText = tagText;
         this.picture = picture;
     }
 
-    public PictureTagTable() {
+    public PictureTagEntity() {
     }
 
     public String getTagText() {
@@ -45,11 +45,11 @@ public class PictureTagTable {
         this.tagText = tagText;
     }
 
-    public PictureTable getPicture() {
+    public PictureEntity getPicture() {
         return picture;
     }
 
-    public void setPicture(PictureTable picture) {
+    public void setPicture(PictureEntity picture) {
         this.picture = picture;
     }
 }
