@@ -23,28 +23,26 @@ public interface ServerApi {
     public static final String UPLOAD_PATH = "/upload/{name}";
 
     public static final String COMMENT_PATH = "/comment";
-    public static final String COMMENT_GETALL_PATH = "/comment";
     public static final String COMMENT_ID_PATH = "/comment/{id}";
-    public static final String COMMENT_GIVELIKEID_PATH = "/comment/givelike/{id}";
-    public static final String COMMENT_GIVEDISLIKEID_PATH = "/comment/givedislike/{id}";
+    public static final String COMMENT_GIVELIKEID_PATH = "/comment/like/{id}";
+    public static final String COMMENT_GIVEDISLIKEID_PATH = "/comment/dislike/{id}";
 
     public static final String PICTURE_PATH = "/picture";
-    public static final String PICTURE_GIVELIKEID_PATH = "/picture/givelike/{id}";
-    public static final String PICTURE_GIVEDISLIKEID_PATH = "/picture/givedislike/{id}";
+    public static final String PICTURE_GIVELIKEID_PATH = "/picture/like/{id}";
+    public static final String PICTURE_GIVEDISLIKEID_PATH = "/picture/dislike/{id}";
     public static final String PICTURE_ID_PATH = "/picture/{id}";
-    public static final String PICTURE_GETONEID_PATH = "/picture/getone/{id}";
-    public static final String PICTURE_GETBYAUTOR_PATH = "/picture/getbyautor/{id}";
-    public static final String PICTURE_GETBYNAME_PATH = "/picture/getbyname/{name}";
-    public static final String PICTURE_GETBYTAG_PATH = "/picture/getbytag/{tag}";
+    public static final String PICTURE_GETBYAUTOR_PATH = "/picture/autor/{id}";
+    public static final String PICTURE_GETBYNAME_PATH = "/picture/name/{name}";
+    public static final String PICTURE_GETBYTAG_PATH = "/picture/tag/{tag}";
 
     public static final String AUTOR_PATH = "/autor";
     public static final String AUTOR_ID_PATH = "/autor/{id}";
-    public static final String AUTOR_GETBYNAME_PATH = "/autor/getbyname/{name}";
+    public static final String AUTOR_GETBYNAME_PATH = "/autor/name/{name}";
 
-    public static final String HOME_PICTURE_GIVELIKE_PATH = "/picture/givelike";
-    public static final String HOME_PICTURE_GIVEDISLIKE_PATH = "/picture/givedislike";
-    public static final String HOME_COMMENT_GIVELIKE_PATH = "/comment/givelike";
-    public static final String HOME_COMMENT_GIVEDISLIKE_PATH = "/comment/givedislike";
+    public static final String HOME_PICTURE_GIVELIKE_PATH = "/picture/like";
+    public static final String HOME_PICTURE_GIVEDISLIKE_PATH = "/picture/dislike";
+    public static final String HOME_COMMENT_GIVELIKE_PATH = "/comment/like";
+    public static final String HOME_COMMENT_GIVEDISLIKE_PATH = "/comment/dislike";
 
 
     @Multipart
@@ -69,7 +67,7 @@ public interface ServerApi {
     @GET(PICTURE_PATH)
     public ResponseEntity<List<PictureEntity>> getPictures();
 
-    @GET(PICTURE_GETONEID_PATH)
+    @GET(PICTURE_ID_PATH)
     public ResponseEntity<PictureEntity> getPictureById();
 
     @DELETE(PICTURE_ID_PATH)
@@ -86,7 +84,7 @@ public interface ServerApi {
     @POST(COMMENT_PATH)
     public ResponseEntity<CommentEntity> addCommentMethod(@Body CommentEntity commentEntity);
 
-    @GET(COMMENT_GETALL_PATH)
+    @GET(COMMENT_PATH)
     public ResponseEntity<List<CommentEntity>> showComments();
 
     @DELETE(COMMENT_ID_PATH)

@@ -41,17 +41,14 @@ public class DefaultController {
             int count = pictureService.getCurrent().size();
             Random rand = new Random();
             int randomNum =  rand.nextInt(count - 1 );
-            //actualPicture = basePictureRepository.findAll().get(randomNum);
             actualPicture = pictureService.getCurrent().get(randomNum);
             id = actualPicture.getId();
         }else{
-            //actualPicture = basePictureRepository.findOne(id);
             actualPicture = pictureService.getPicture(id);
         }
 
-        //PictureEntity previousPicture = basePictureRepository.findFirstByIdLessThanOrderByIdDesc(id);
+
         PictureEntity previousPicture = pictureService.getPreviousPicture(id);
-        //PictureEntity nextPicture = basePictureRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
         PictureEntity nextPicture = pictureService.getNextPicture(id);
 
         List<CommentEntity> comments = commentService.getRelatedComments(actualPicture.getId());
@@ -66,7 +63,7 @@ public class DefaultController {
 
 
     @RequestMapping(ServerApi.HOME_COMMENT_GIVELIKE_PATH)
-    public String giveLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
+    public String giveLikeToCommentHome(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
             CommentEntity comment = commentService.getComment(id);
             if (comment != null) {
@@ -80,7 +77,7 @@ public class DefaultController {
     }
 
     @RequestMapping(ServerApi.HOME_COMMENT_GIVEDISLIKE_PATH)
-    public String giveDisLikeToComment(@RequestParam(name = "id", defaultValue = "") UUID id) {
+    public String giveDisLikeToCommentHome(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
             CommentEntity comment = commentService.getComment(id);
             if (comment != null) {
@@ -94,7 +91,7 @@ public class DefaultController {
     }
 
     @RequestMapping(ServerApi.HOME_PICTURE_GIVELIKE_PATH)
-    public String giveLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
+    public String giveLikeToPictureHome(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
             PictureEntity picture = pictureService.getPicture(id);
             if (picture != null) {
@@ -107,7 +104,7 @@ public class DefaultController {
     }
 
     @RequestMapping(ServerApi.HOME_PICTURE_GIVEDISLIKE_PATH)
-    public String giveDisLikeToPicture(@RequestParam(name = "id", defaultValue = "") UUID id) {
+    public String giveDisLikeToPictureHome(@RequestParam(name = "id", defaultValue = "") UUID id) {
         if(id != null){
             PictureEntity picture = pictureService.getPicture(id);
             if (picture != null) {

@@ -57,7 +57,7 @@ public class CommentController {
     }
 
     //retrieve
-    @RequestMapping(value = ServerApi.COMMENT_GETALL_PATH, method = RequestMethod.GET)
+    @RequestMapping(value = ServerApi.COMMENT_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<CommentEntity>> showComments() {
         List<CommentEntity> comments = commentService.getCurrent();
         return new ResponseEntity<>(comments,HttpStatus.OK);

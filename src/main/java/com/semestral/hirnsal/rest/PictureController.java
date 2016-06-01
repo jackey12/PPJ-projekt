@@ -166,7 +166,7 @@ public class PictureController {
         return new ResponseEntity<>(pictureService.getCurrent(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = ServerApi.PICTURE_GETONEID_PATH, method = RequestMethod.GET)
+    @RequestMapping(value = ServerApi.PICTURE_ID_PATH, method = RequestMethod.GET)
     public ResponseEntity<PictureEntity> getPictureById(@PathVariable UUID id) {
         return new ResponseEntity<>(pictureService.getPicture(id), HttpStatus.OK);
     }

@@ -46,8 +46,8 @@
                 </tr>
                 <tr>
                     <!--/*@thymesVar id="actualPicture" type="com.semestral.hirnsal.db.tables.PictureEntity"*/-->
-                    <td><a th:href="@{'/picture/givelike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getLikesCount()}"></a></td>
-                    <td><a th:href="@{'/picture/givedislike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getDislikesCount()}"></a></td>
+                    <td><a th:href="@{'/picture/like'(id=${actualPicture.getId()})}" th:text="${actualPicture.getLikesCount()}"></a></td>
+                    <td><a th:href="@{'/picture/dislike'(id=${actualPicture.getId()})}" th:text="${actualPicture.getDislikesCount()}"></a></td>
                 </tr>
             </table>
             <p>
@@ -69,8 +69,8 @@
             <div class="comment">
                 <p th:text=" ${comment.getCommentText()}" ></p>
                 <p th:text="'Autor ' + ${comment.getAutor().getName()} + '| vytvořeno : ' + ${comment.getCreatedAt()}" ></p>
-                <a th:href="@{'comment/givelike'(id=${comment.getId()})}" th:text="'Likes: '+ ${comment.getLikesCount()}" />
-                <a th:href="@{'comment/givedislike'(id=${comment.getId()})}" th:text="'Dislikes: '+ ${comment.getDislikesCount()}" />
+                <a th:href="@{'comment/like'(id=${comment.getId()})}" th:text="'Likes: '+ ${comment.getLikesCount()}" />
+                <a th:href="@{'comment/dislike'(id=${comment.getId()})}" th:text="'Dislikes: '+ ${comment.getDislikesCount()}" />
             </div>
         </div>
     </div>
