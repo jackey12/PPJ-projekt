@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +47,15 @@ public class CommentController {
         }
     }
 
+    @RequestMapping(value = ServerApi.COMMENT_ID_PATH, method = RequestMethod.PUT)
+    public ResponseEntity<CommentEntity> updateCommentMethod(@PathVariable UUID id, @RequestBody CommentEntity commentEntity) {
+        CommentEntity commentUp = commentService.getComment(id);
+        commentUp.setCommentText(commentEntity.getCommentText());
+        commentUp.setLastUpdate(new Date());
+        commentService.saveOrUpdate(commentUp);
+        return new ResponseEntity<>(commentUp, HttpStatus.OK);
+    }
+
     //retrieve
     @RequestMapping(value = ServerApi.COMMENT_GETALL_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<CommentEntity>> showComments() {
@@ -65,7 +75,7 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value={ServerApi.COMMENT_GIVELIKEID_PATH}, method = RequestMethod.GET)
+    @RequestMapping(value={ServerApi.COMMENT_GIVELIKEID_PATH}, method = RequestMethod.PUT)
     public ResponseEntity<Long> giveLikeToComment(@PathVariable UUID id) {
         CommentEntity commentEntity = commentService.getComment(id);
         logger.debug("Picture id ="+id);
@@ -80,8 +90,8 @@ public class CommentController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value=ServerApi.COMMENT_GIVEDISLIKEID_PATH)
-    public ResponseEntity<Long> giveDislikeToPicture(@PathVariable UUID id) {
+    @RequestMapping(method = RequestMethod.PUT, value=ServerApi.COMMENT_GIVEDISLIKEID_PATH)
+    public ResponseEntity<Long> giveDislikeToComment(@PathVariable UUID id) {
         CommentEntity commentEntity = commentService.getComment(id);
         if (commentEntity != null) {
             long count = commentService.incrementDisLikes(commentEntity);

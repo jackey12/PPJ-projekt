@@ -115,7 +115,7 @@ public class PictureController {
     }
 
 
-    @RequestMapping(value={ServerApi.PICTURE_GIVELIKEID_PATH}, method = RequestMethod.GET)
+    @RequestMapping(value={ServerApi.PICTURE_GIVELIKEID_PATH}, method = RequestMethod.PUT)
     public ResponseEntity<Long> giveLikeToPicture(@PathVariable UUID id) {
         PictureEntity pictureEntity = pictureService.getPicture(id);
         logger.debug("Picture id -="+id);
@@ -130,7 +130,7 @@ public class PictureController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value=ServerApi.PICTURE_GIVEDISLIKEID_PATH)
+    @RequestMapping(method = RequestMethod.PUT, value=ServerApi.PICTURE_GIVEDISLIKEID_PATH)
     public ResponseEntity<Long> giveDislikeToPicture(@PathVariable UUID id) {
         PictureEntity pictureEntity = pictureService.getPicture(id);
         if (pictureEntity != null) {
@@ -195,5 +195,34 @@ public class PictureController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value = ServerApi.PICTURE_ID_PATH, method=RequestMethod.PUT)
+    public ResponseEntity<PictureEntity> updateImage(@PathVariable UUID id, @RequestBody PictureEntity pictureEntity) {
+        PictureEntity pictureUp = pictureService.getPicture(id);
+
+        if (pictureEntity.getAutor() != null) {
+            AutorEntity autor = autorService.getAutor(pictureEntity.getAutor().getId());
+            if (autor != null) pictureUp.setAutor(autor);
+        }
+
+        if (!pictureEntity.getName().isEmpty()) {
+            pictureUp.setName(pictureEntity.getName());
+        }
+
+        if (!pictureEntity.getPictureURL().isEmpty()) {
+            pictureUp.setPictureURL(pictureEntity.getPictureURL());
+        }
+        if (!pictureEntity.getTags().isEmpty()) {
+            pictureUp.setTags(pictureEntity.getTags());
+        }
+
+
+        pictureUp.setLikesCount(pictureEntity.getLikesCount());
+        pictureUp.setDislikesCount(pictureEntity.getDislikesCount());
+
+        pictureUp.setLastUpdate(new Date());
+        pictureService.saveOrUpdate(pictureUp);
+        return new ResponseEntity<>(pictureUp, HttpStatus.OK);
     }
 }

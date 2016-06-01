@@ -1,10 +1,16 @@
 package com.semestral.hirnsal.client;
 
 
+import com.semestral.hirnsal.db.tables.AutorEntity;
+import com.semestral.hirnsal.db.tables.CommentEntity;
+import com.semestral.hirnsal.db.tables.PictureEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit.http.*;
+import retrofit.mime.TypedFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -43,15 +49,77 @@ public interface ServerApi {
 
     @Multipart
     @POST(UPLOAD_PATH)
-    public ImageStatus uploadImage(@PathVariable("name") String name,
-                            @RequestParam("data") MultipartFile imageData,
-                            @RequestParam(value = "tags", required = false)List<String> tags,
-                            @RequestParam(value = "iDautor", required = false)UUID iDautor,
-                            HttpServletResponse response);
+    public ImageStatus uploadImage(@Path("name") String name, @Part("data") TypedFile imageData);
 
-    @GET(PICTURE_GIVELIKEID_PATH)
-    public long giveLikeToPicture(@Path("id") UUID id);
+    @PUT(PICTURE_GIVELIKEID_PATH)
+    public ResponseEntity<Long> giveLikeToPicture(@Path("id") UUID id);
 
-    @GET(PICTURE_GIVEDISLIKEID_PATH)
-    public long giveDislikeToPicture(@Path("id") UUID id);
+    @PUT(PICTURE_GIVEDISLIKEID_PATH)
+    public ResponseEntity<Long> giveDislikeToPicture(@Path("id") UUID id);
+
+    @GET(PICTURE_GETBYAUTOR_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByAuthor(@Path("id") UUID id);
+
+    @GET(PICTURE_GETBYNAME_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByName(@Path("name") String name);
+
+    @GET(PICTURE_GETBYTAG_PATH)
+    public ResponseEntity<List<PictureEntity>> getPicturesByTag(@Path("tag") String name);
+
+    @GET(PICTURE_PATH)
+    public ResponseEntity<List<PictureEntity>> getPictures();
+
+    @GET(PICTURE_GETONEID_PATH)
+    public ResponseEntity<PictureEntity> getPictureById();
+
+    @DELETE(PICTURE_ID_PATH)
+    public ResponseEntity<PictureEntity> deletePicture();
+
+    @POST(PICTURE_PATH)
+    public ResponseEntity<PictureEntity> createPicture(@Body PictureEntity pictureEntity);
+
+    @PUT(PICTURE_ID_PATH)
+    public ResponseEntity<PictureEntity> updateImage(@Path("id") UUID id, @Body PictureEntity pictureEntity);
+
+
+
+    @POST(COMMENT_PATH)
+    public ResponseEntity<CommentEntity> addCommentMethod(@Body CommentEntity commentEntity);
+
+    @GET(COMMENT_GETALL_PATH)
+    public ResponseEntity<List<CommentEntity>> showComments();
+
+    @DELETE(COMMENT_ID_PATH)
+    public ResponseEntity<CommentEntity> deleteComment(@Path("id") UUID id);
+
+    @PUT(COMMENT_GIVELIKEID_PATH)
+    public ResponseEntity<Long> giveLikeToComment(@Path("id") UUID id);
+
+    @PUT(COMMENT_GIVEDISLIKEID_PATH)
+    public ResponseEntity<Long> giveDislikeToPComment(@Path("id") UUID id);
+
+    @GET(COMMENT_ID_PATH)
+    public ResponseEntity<CommentEntity> getCommentByID(@Path("id") UUID id);
+
+    @PUT(COMMENT_ID_PATH)
+    public ResponseEntity<CommentEntity> updateCommentMethod(@Path("id") UUID id, @Body CommentEntity commentEntity);
+
+
+    @POST(AUTOR_PATH)
+    public ResponseEntity<AutorEntity> createAutor(@Body AutorEntity autorEntity);
+
+    @DELETE(AUTOR_ID_PATH)
+    public ResponseEntity<AutorEntity> deleteAutor(@Path("id") UUID id);
+
+    @GET(AUTOR_PATH)
+    public ResponseEntity<List<AutorEntity>> getAllAutors();
+
+    @GET(AUTOR_ID_PATH)
+    public ResponseEntity<AutorEntity>  getAutor(@Path("id") UUID id);
+
+    @GET(AUTOR_GETBYNAME_PATH)
+    public ResponseEntity<List<AutorEntity>> getAutorByName(@Path("name")String name);
+
+    @PUT(AUTOR_ID_PATH)
+    public ResponseEntity<AutorEntity> updateAuthor(@Path("id") UUID id, @Body AutorEntity autor);
 }

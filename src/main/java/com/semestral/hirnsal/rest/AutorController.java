@@ -58,5 +58,13 @@ public class AutorController {
         return new ResponseEntity<>(autorService.getAutorsByName(name), HttpStatus.OK);
     }
 
+    @RequestMapping(value = ServerApi.AUTOR_ID_PATH, method=RequestMethod.PUT)
+    public ResponseEntity<AutorEntity> updateAuthor(@PathVariable UUID id, @RequestBody AutorEntity autor) {
+        AutorEntity autorUp = autorService.getAutor(id);
+        autorUp.setName(autor.getName());
+        autorService.save(autorUp);
+        return new ResponseEntity<>(autorUp, HttpStatus.OK);
+    }
+
 
 }

@@ -41,5 +41,9 @@ public class AutorService {
         return baseAutorRepository.findByName(name);
     }
 
+    public void save(AutorEntity autorEntity){
+        baseAutorRepository.save(autorEntity);
+    }
+
 
 }
