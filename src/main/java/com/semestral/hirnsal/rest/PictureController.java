@@ -3,12 +3,10 @@ package com.semestral.hirnsal.rest;
 import com.semestral.hirnsal.SemestralJhApplication;
 import com.semestral.hirnsal.client.*;
 
+import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
+import com.semestral.hirnsal.db.repositories.BasePictureRepository;
 import com.semestral.hirnsal.db.tables.AutorEntity;
 import com.semestral.hirnsal.db.tables.PictureEntity;
-import com.semestral.hirnsal.db.tables.PictureTagEntity;
-import com.semestral.hirnsal.service.AutorService;
-import com.semestral.hirnsal.service.PictureService;
-import com.semestral.hirnsal.service.PictureTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +36,12 @@ import java.util.UUID;
 public class PictureController {
     //CRUD control
 
-    PictureService pictureService;
-    PictureTagService pictureTagService;
-    AutorService autorService;
+    @Autowired
+    BasePictureRepository basePictureRepository;
+    //PictureTagService pictureTagService;
+    @Autowired
+    BaseAutorRepository baseAutorRepository;
+
     @Value("${dataimg.path}")
     String dataImgPath;
     @Autowired
@@ -49,18 +49,6 @@ public class PictureController {
     private static final Logger logger = LoggerFactory.getLogger(SemestralJhApplication.class);
 
     private final String filePrefix = "file://";
-    @Autowired
-    public void setPictureService(PictureService pictureService) {
-        this.pictureService = pictureService;
-    }
-    @Autowired
-    public void setAutorService(AutorService autorService) {
-        this.autorService = autorService;
-    }
-    @Autowired
-    public void sePictureTagService(PictureTagService pictureTagService) {
-        this.pictureTagService = pictureTagService;
-    }
 
 
     @RequestMapping(value = ServerApi.UPLOAD_PATH, method = RequestMethod.POST)
@@ -68,7 +56,6 @@ public class PictureController {
     @ResponseBody
     ImageStatus uploadImage(@PathVariable("name") String name,
                             @RequestParam("data") MultipartFile imageData,
-                            @RequestParam(value = "tags", required = false)List<String> tags,
                             @RequestParam(value = "iDautor", required = false)UUID iDautor,
                             HttpServletResponse response) {
 
@@ -89,22 +76,13 @@ public class PictureController {
             logger.debug("Picture uploaded to path ="+target);
 
 
-
             if(iDautor != null){
-                AutorEntity autorEntity = autorService.getAutor(iDautor);
+                AutorEntity autorEntity = baseAutorRepository.findOne(iDautor);
                 pictureEntity.setAutor(autorEntity);
             }
-            List<PictureTagEntity> tagList = new ArrayList<>();
-            if(tags != null){
-                for (String tag: tags) {
-                    tagList.add(new PictureTagEntity(UUID.randomUUID(), tag, pictureEntity));
-                }
-                pictureEntity.setTags(tagList);
-            }
-            pictureService.saveOrUpdate(pictureEntity);
-            if(tags != null){
-                pictureTagService.creteTags(tagList);
-            }
+
+            basePictureRepository.save(pictureEntity);
+
             logger.debug("Created Picture with path ="+ pictureEntity.getPictureURL());
             state =new ImageStatus(ImageStatus.ImageState.UPLOADED);
         } catch (IOException e) {
@@ -117,11 +95,15 @@ public class PictureController {
 
     @RequestMapping(value={ServerApi.PICTURE_GIVELIKEID_PATH}, method = RequestMethod.PUT)
     public ResponseEntity<Long> giveLikeToPicture(@PathVariable UUID id) {
-        PictureEntity pictureEntity = pictureService.getPicture(id);
+        PictureEntity pictureEntity = basePictureRepository.findOne(id);
         logger.debug("Picture id -="+id);
         if (pictureEntity != null) {
             logger.debug("Picture id ="+id);
-            long count = pictureService.incrementLikes(pictureEntity);
+            Date date = new Date();
+            pictureEntity.setLikesCount(pictureEntity.getLikesCount()+1);
+            pictureEntity.setLastUpdate(date);
+            basePictureRepository.save(pictureEntity);
+            long count = pictureEntity.getLikesCount();
             logger.debug("Like Incremented to ="+count);
             return new ResponseEntity<>(count, HttpStatus.OK);
         } else {
@@ -132,10 +114,14 @@ public class PictureController {
 
     @RequestMapping(method = RequestMethod.PUT, value=ServerApi.PICTURE_GIVEDISLIKEID_PATH)
     public ResponseEntity<Long> giveDislikeToPicture(@PathVariable UUID id) {
-        PictureEntity pictureEntity = pictureService.getPicture(id);
+        PictureEntity pictureEntity = basePictureRepository.findOne(id);
         if (pictureEntity != null) {
             logger.debug("Picture id ="+id);
-            long count = pictureService.incrementDisLikes(pictureEntity);
+            Date date = new Date();
+            pictureEntity.setDislikesCount(pictureEntity.getDislikesCount()+1);
+            pictureEntity.setLastUpdate(date);
+            basePictureRepository.save(pictureEntity);
+            long count = pictureEntity.getDislikesCount();
             logger.debug("Dislike Incremented to ="+count);
             return new ResponseEntity<>(count, HttpStatus.OK);
 
@@ -147,35 +133,35 @@ public class PictureController {
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYAUTOR_PATH)
     public ResponseEntity<List<PictureEntity>> getPicturesByAuthor(@PathVariable UUID id) {
-        return new ResponseEntity<>(pictureService.getPictureByAutor(id), HttpStatus.OK);
+        return new ResponseEntity<>(basePictureRepository.findByAutorId(id), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYNAME_PATH)
     public ResponseEntity<List<PictureEntity>> getPicturesByName(@PathVariable String name) {
-        return new ResponseEntity<>(pictureService.getPictureByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(basePictureRepository.findByName(name), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.PICTURE_GETBYTAG_PATH)
     public ResponseEntity<List<PictureEntity>> getPicturesByTag(@PathVariable String tag) {
-        return new ResponseEntity<>(pictureService.getPictureByTag(tag), HttpStatus.OK);
+        return new ResponseEntity<>(basePictureRepository.findByTagsTagText(tag), HttpStatus.OK);
     }
 
 
     @RequestMapping(value = ServerApi.PICTURE_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<PictureEntity>> getPictures() {
-        return new ResponseEntity<>(pictureService.getCurrent(), HttpStatus.OK);
+        return new ResponseEntity<>(basePictureRepository.findAll(), HttpStatus.OK);
     }
 
     @RequestMapping(value = ServerApi.PICTURE_ID_PATH, method = RequestMethod.GET)
     public ResponseEntity<PictureEntity> getPictureById(@PathVariable UUID id) {
-        return new ResponseEntity<>(pictureService.getPicture(id), HttpStatus.OK);
+        return new ResponseEntity<>(basePictureRepository.findOne(id), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = ServerApi.PICTURE_ID_PATH)
     public ResponseEntity<PictureEntity> deletePicture(@PathVariable UUID id) {
-        PictureEntity picture = pictureService.getPicture(id);
+        PictureEntity picture = basePictureRepository.findOne(id);
         if(picture != null){
-            pictureService.delete(id);
+            basePictureRepository.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else{
@@ -190,7 +176,7 @@ public class PictureController {
             Date date = new Date();
             pictureEntity.setCreatedAt(date);
             pictureEntity.setLastUpdate(date);
-            pictureService.create(pictureEntity);
+            basePictureRepository.save(pictureEntity);
             return new ResponseEntity<>(pictureEntity, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -199,10 +185,10 @@ public class PictureController {
 
     @RequestMapping(value = ServerApi.PICTURE_ID_PATH, method=RequestMethod.PUT)
     public ResponseEntity<PictureEntity> updateImage(@PathVariable UUID id, @RequestBody PictureEntity pictureEntity) {
-        PictureEntity pictureUp = pictureService.getPicture(id);
+        PictureEntity pictureUp = basePictureRepository.findOne(id);
 
         if (pictureEntity.getAutor() != null) {
-            AutorEntity autor = autorService.getAutor(pictureEntity.getAutor().getId());
+            AutorEntity autor = baseAutorRepository.findOne(pictureEntity.getAutor().getId());
             if (autor != null) pictureUp.setAutor(autor);
         }
 
@@ -222,7 +208,7 @@ public class PictureController {
         pictureUp.setDislikesCount(pictureEntity.getDislikesCount());
 
         pictureUp.setLastUpdate(new Date());
-        pictureService.saveOrUpdate(pictureUp);
+        basePictureRepository.save(pictureUp);
         return new ResponseEntity<>(pictureUp, HttpStatus.OK);
     }
 }

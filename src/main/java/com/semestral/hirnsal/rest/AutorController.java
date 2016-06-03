@@ -1,8 +1,8 @@
 package com.semestral.hirnsal.rest;
 
 import com.semestral.hirnsal.client.ServerApi;
+import com.semestral.hirnsal.db.repositories.BaseAutorRepository;
 import com.semestral.hirnsal.db.tables.AutorEntity;
-import com.semestral.hirnsal.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,49 +20,45 @@ import java.util.UUID;
 public class AutorController {
     //CRUD control
 
-    AutorService autorService;
     @Autowired
-    public void setAutorServicee(AutorService autorService) {
-        this.autorService = autorService;
-    }
+    BaseAutorRepository baseAutorRepository;
 
     @RequestMapping(method = RequestMethod.POST, value = ServerApi.AUTOR_PATH)
     public ResponseEntity<AutorEntity> createAutor(@RequestBody AutorEntity autorEntity) {
         autorEntity.SetDate(new Date());
-        autorService.create(autorEntity);
+        baseAutorRepository.save(autorEntity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.DELETE, value = ServerApi.AUTOR_ID_PATH)
     public ResponseEntity<AutorEntity> deleteAutor(@PathVariable UUID id) {
-        AutorEntity autorEntity = autorService.getAutor(id);
+        AutorEntity autorEntity = baseAutorRepository.findOne(id);
         if (autorEntity == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
-            autorService.delete(id);
+            baseAutorRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.AUTOR_PATH)
     public ResponseEntity<List<AutorEntity>> getAllAutors() {
-        return new ResponseEntity<>(autorService.getAllAutors(), HttpStatus.OK);
+        return new ResponseEntity<>(baseAutorRepository.findAll(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.AUTOR_ID_PATH)
     public ResponseEntity<AutorEntity>  getAutor(@PathVariable UUID id) {
-        return new ResponseEntity<>(autorService.getAutor(id), HttpStatus.OK);
+        return new ResponseEntity<>(baseAutorRepository.findOne(id), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ServerApi.AUTOR_GETBYNAME_PATH)
     public ResponseEntity<List<AutorEntity>> getAutorByName(@PathVariable String name) {
-        autorService.getAutorsByName(name);
-        return new ResponseEntity<>(autorService.getAutorsByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(baseAutorRepository.findByName(name), HttpStatus.OK);
     }
 
     @RequestMapping(value = ServerApi.AUTOR_ID_PATH, method=RequestMethod.PUT)
     public ResponseEntity<AutorEntity> updateAuthor(@PathVariable UUID id, @RequestBody AutorEntity autor) {
-        AutorEntity autorUp = autorService.getAutor(id);
+        AutorEntity autorUp = baseAutorRepository.findOne(id);
         autorUp.setName(autor.getName());
-        autorService.save(autorUp);
+        baseAutorRepository.save(autorUp);
         return new ResponseEntity<>(autorUp, HttpStatus.OK);
     }
 
