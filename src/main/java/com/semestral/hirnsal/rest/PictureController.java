@@ -192,17 +192,17 @@ public class PictureController {
             if (autor != null) pictureUp.setAutor(autor);
         }
 
-        if (!pictureEntity.getName().isEmpty()) {
+        if (pictureEntity.getName()!= null) {
             pictureUp.setName(pictureEntity.getName());
         }
 
-        if (!pictureEntity.getPictureURL().isEmpty()) {
+        if (pictureEntity.getPictureURL()!= null) {
             pictureUp.setPictureURL(pictureEntity.getPictureURL());
         }
-        if (!pictureEntity.getTags().isEmpty()) {
+
+        if (pictureEntity.getTags()!= null) {
             pictureUp.setTags(pictureEntity.getTags());
         }
-
 
         pictureUp.setLikesCount(pictureEntity.getLikesCount());
         pictureUp.setDislikesCount(pictureEntity.getDislikesCount());

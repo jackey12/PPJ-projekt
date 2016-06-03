@@ -1,6 +1,7 @@
 package com.semestral.hirnsal.db.tables;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -28,12 +29,12 @@ public class AutorEntity {
 
     @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @JsonBackReference
+    @JsonIgnore
     private List<CommentEntity> comments;
 
     @OneToMany(mappedBy = "autor")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @JsonBackReference
+    @JsonIgnore
     private List<PictureEntity> pictures;
 
     public AutorEntity(UUID id, String name, Date date) {
@@ -70,6 +71,27 @@ public class AutorEntity {
         return "Author (id = "+ id +", name = " +name+ ", regDate = "+date.toString()+")" ;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
+    }
+
+    public List<PictureEntity> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<PictureEntity> pictures) {
+        this.pictures = pictures;
+    }
 }

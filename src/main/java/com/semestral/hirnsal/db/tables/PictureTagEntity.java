@@ -1,6 +1,7 @@
 package com.semestral.hirnsal.db.tables;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,7 +26,7 @@ public class PictureTagEntity {
     @ManyToOne
     @JoinColumn(name = "picture")
     @DBRef
-    @JsonBackReference
+    @JsonIgnore
     private PictureEntity picture;
 
     public PictureTagEntity(UUID id, String tagText, PictureEntity picture) {
@@ -51,5 +52,13 @@ public class PictureTagEntity {
 
     public void setPicture(PictureEntity picture) {
         this.picture = picture;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

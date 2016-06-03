@@ -1,6 +1,7 @@
 package com.semestral.hirnsal.db.tables;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -28,7 +29,7 @@ public class PictureEntity {
     private String name;
     @ManyToOne
     @JoinColumn(name = "autor")
-    @JsonBackReference
+    @JsonIgnore
     @DBRef
     private AutorEntity autor;
     @Column(nullable = false)
@@ -38,7 +39,7 @@ public class PictureEntity {
     private long dislikesCount = 0;
     @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @JsonManagedReference
+    @JsonIgnore
     private List<PictureTagEntity> tags;
 
     public PictureEntity(UUID id, String pictureURL, String name, AutorEntity autor, Date createdAt, Date lastUpdate, long likesCount, long dislikesCount, List<PictureTagEntity> tags) {
@@ -142,5 +143,9 @@ public class PictureEntity {
             tags.add(tag.getTagText());
         }
         return tags;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }
